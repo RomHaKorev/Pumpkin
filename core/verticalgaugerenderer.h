@@ -39,6 +39,7 @@ public:
 
 		painter.save();
 		painter.setRenderHint(QPainter::Antialiasing);
+		painter.setPen(Qt::NoPen);
 
 		QPainterPath clipPath;
 		if (parent->style()->rounded())
@@ -46,8 +47,8 @@ public:
 		else
 			clipPath.addRect(contentRect);
 		painter.setBrush(parent->style()->background());
-		painter.drawPath(clipPath);
 		painter.setClipPath(clipPath);
+		painter.drawPath(clipPath);
 
 		QPointF const p1(contentRect.x(), y);
 		QPointF const p2(contentRect.x() + contentRect.width(), y);

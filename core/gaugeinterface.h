@@ -13,8 +13,8 @@ class Brushes: public QObject
 
 public:
 	Brushes(QObject* parent=nullptr): QObject(parent),
-		backgroundBrush(Qt::white),
-		progressBrush(Qt::black)
+		backgroundBrush(QColor(30, 40, 42)),
+		progressBrush(QColor(0, 194, 173))
 	{}
 	inline QColor const& progress() const { return progressBrush; }
 	inline QColor const& background() const { return backgroundBrush; }

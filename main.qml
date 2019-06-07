@@ -18,7 +18,6 @@ Item {
             minimum: 0
             maximum: 100
             value: foo.value
-            style.progress: "red"
             style.rounded: true
         }
         SpinBox {
