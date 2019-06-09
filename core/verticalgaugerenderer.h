@@ -63,7 +63,7 @@ public:
 		path.lineTo(contentRect.bottomRight());
 		path.closeSubpath();
 
-		painter.setBrush(parent->style()->progress());
+		painter.setBrush(parent->style()->foreground());
 		painter.drawPath(path);
 		painter.restore();
 	}

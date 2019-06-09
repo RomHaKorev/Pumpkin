@@ -31,9 +31,17 @@ HEADERS += \
     widgets/verticalgauge.h \
     core/verticalgaugerenderer.h \
     qml/verticalgaugeqml.h \
-    core/gaugeinterface.h
+    core/gaugeinterface.h \
+    qml/circulargaugeqml.h \
+    core/circulargaugerenderer.h \
+    core/abstractgaugerenderer.h \
+    qml/pumpkin.h \
+    widgets/circulargauge.h \
 
 SOURCES += \
         main.cpp \
     widgets/verticalgauge.cpp \
-    qml/verticalgaugeqml.cpp
+    qml/verticalgaugeqml.cpp \
+    qml/circulargaugeqml.cpp \
+    core/verticalgaugerenderer.cpp \
+    widgets/circulargauge.cpp \

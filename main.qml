@@ -12,9 +12,22 @@ Item {
     visible: true
     width: 640
     height: 480
+
+    function updateGallery()
+    {
+        verticalGaugeWidget.setValue(foo.value)
+        circularGaugeWidget.setValue(foo.value)
+    }
+
     RowLayout {
         anchors.fill: parent
         VerticalGauge {
+            minimum: 0
+            maximum: 100
+            value: foo.value
+            style.rounded: true
+        }
+        CircularGauge {
             minimum: 0
             maximum: 100
             value: foo.value
@@ -26,37 +39,17 @@ Item {
             to: 100
             value: 50
             editable: true
-            onValueChanged: verticalGaugeWidget.setValue(value)
-            Component.onCompleted: verticalGaugeWidget.setValue(value)
+            onValueChanged: updateGallery()
+            Component.onCompleted: updateGallery()
         }
-        GroupBox {
-            title: qsTr("Synchronize")
-            ColumnLayout {
-                anchors.fill: parent
-                CheckBox { text: qsTr("E-mail") }
-                CheckBox { text: qsTr("Calendar") }
-                CheckBox { text: qsTr("Contacts") }
-            }
-        }
-
         CollapsibleGroupBox {
             title: qsTr("Synchronize")
-            Layout.alignment: Qt.AlignTop
+            //Layout.alignment: Qt.AlignTop
             ColumnLayout {
                 anchors.fill: parent
                 CheckBox { text: qsTr("E-mail") }
                 CheckBox { text: qsTr("Calendar") }
                 CheckBox { text: qsTr("Contacts") }
-                CollapsibleGroupBox {
-                    title: qsTr("Synchronize")
-                    Layout.alignment: Qt.AlignTop
-                    ColumnLayout {
-                        anchors.fill: parent
-                        CheckBox { text: qsTr("E-mail") }
-                        CheckBox { text: qsTr("Calendar") }
-                        CheckBox { text: qsTr("Contacts") }
-                    }
-                }
             }
         }
     }

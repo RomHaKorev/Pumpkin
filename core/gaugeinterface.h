@@ -7,28 +7,28 @@
 class Brushes: public QObject
 {
 	Q_OBJECT
-	Q_PROPERTY(QColor progress READ progress WRITE setProgress)
+	Q_PROPERTY(QColor foreground READ foreground WRITE setForeground)
 	Q_PROPERTY(QColor background READ background WRITE setBackground)
 	Q_PROPERTY(bool rounded READ rounded WRITE setRounded)
 
 public:
 	Brushes(QObject* parent=nullptr): QObject(parent),
 		backgroundBrush(QColor(30, 40, 42)),
-		progressBrush(QColor(0, 194, 173))
+		foregroundBrush(QColor(0, 194, 173))
 	{}
-	inline QColor const& progress() const { return progressBrush; }
+	inline QColor const& foreground() const { return foregroundBrush; }
 	inline QColor const& background() const { return backgroundBrush; }
 	inline bool const& rounded() const { return roundedValue; }
 
 public slots:
-	void setProgress(QColor const& value) { progressBrush = value; }
+	void setForeground(QColor const& value) { foregroundBrush = value; }
 	void setBackground(QColor const& value) { backgroundBrush = value; }
 	void setRounded(bool value) { roundedValue = value; }
 signals:
 	void changed();
 
 private:
-	QColor backgroundBrush, progressBrush;
+	QColor backgroundBrush, foregroundBrush;
 	bool roundedValue;
 };
 

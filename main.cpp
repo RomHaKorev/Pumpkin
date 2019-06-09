@@ -3,9 +3,10 @@
 #include <QtWidgets>
 #include <QQmlContext>
 
-#include "qml/verticalgaugeqml.h"
+#include "qml/pumpkin.h"
 
 #include "widgets/verticalgauge.h"
+#include "widgets/circulargauge.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,6 +16,7 @@ int main(int argc, char *argv[])
 
 	qmlRegisterType<Brushes>();
 	qmlRegisterType<VerticalGaugeQML>("pumpkin.gauges", 1, 0, "VerticalGauge");
+	qmlRegisterType<CircularGaugeQML>("pumpkin.gauges", 1, 0, "CircularGauge");
 
 
 
@@ -24,13 +26,16 @@ int main(int argc, char *argv[])
 		return -1;*/
 
 	Pumpkin::VerticalGauge* verticalGaugeWidget = new Pumpkin::VerticalGauge();
+	Pumpkin::CircularGauge* circularGaugeWidget = new Pumpkin::CircularGauge();
 
 	QWidget* widgets = new QWidget();
 	QGridLayout* grid = new QGridLayout(widgets);
 	grid->addWidget(verticalGaugeWidget);
+	grid->addWidget(circularGaugeWidget);
 
 	QQuickWidget *view = new QQuickWidget;
 	view->rootContext()->setContextProperty("verticalGaugeWidget", verticalGaugeWidget);
+	view->rootContext()->setContextProperty("circularGaugeWidget", circularGaugeWidget);
 	view->setSource(QUrl(QStringLiteral("qrc:/main.qml")));
 
 
