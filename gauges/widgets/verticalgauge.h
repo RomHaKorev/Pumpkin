@@ -3,8 +3,8 @@
 
 #include <QWidget>
 
-#include "../core/gaugeinterface.h"
-#include "../core/verticalgaugerenderer.h"
+#include "../gaugeinterface.h"
+#include "../renderers/verticalgaugerenderer.h"
 
 namespace Pumpkin {
 class VerticalGauge : public QWidget

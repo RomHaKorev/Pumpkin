@@ -1,7 +1,7 @@
 #include "circulargaugeqml.h"
 
 
-#include "../core/circulargaugerenderer.h"
+#include "../renderers/circulargaugerenderer.h"
 
 CircularGaugeQML::CircularGaugeQML(QQuickItem* parent): QQuickPaintedItem (parent),
   renderer(new CircularGaugeRenderer<CircularGaugeQML>(this))

@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.3
 
 import pumpkin.gauges 1.0
 
-import "./qml"
+//import "../boxes/qml"
 
 Item {
     visible: true
@@ -42,7 +42,7 @@ Item {
             onValueChanged: updateGallery()
             Component.onCompleted: updateGallery()
         }
-        CollapsibleGroupBox {
+        /*CollapsibleGroupBox {
             title: qsTr("Synchronize")
             //Layout.alignment: Qt.AlignTop
             ColumnLayout {
@@ -51,7 +51,7 @@ Item {
                 CheckBox { text: qsTr("Calendar") }
                 CheckBox { text: qsTr("Contacts") }
             }
-        }
+        }*/
     }
 
 

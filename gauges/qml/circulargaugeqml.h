@@ -4,7 +4,7 @@
 #include <QQuickPaintedItem>
 
 #include <QBrush>
-#include "../core/gaugeinterface.h"
+#include "../gaugeinterface.h"
 
 template<typename T> class CircularGaugeRenderer;
 

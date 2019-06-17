@@ -3,8 +3,8 @@
 
 #include <QWidget>
 
-#include "../core/gaugeinterface.h"
-#include "../core/circulargaugerenderer.h"
+#include "../gaugeinterface.h"
+#include "../renderers/circulargaugerenderer.h"
 
 namespace Pumpkin {
 class CircularGauge : public QWidget

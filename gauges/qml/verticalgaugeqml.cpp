@@ -1,6 +1,6 @@
 #include "verticalgaugeqml.h"
 
-#include "../core/verticalgaugerenderer.h"
+#include "../renderers/verticalgaugerenderer.h"
 
 VerticalGaugeQML::VerticalGaugeQML(QQuickItem* parent): QQuickPaintedItem (parent),
 	renderer(new VerticalGaugeRenderer<VerticalGaugeQML>(this))

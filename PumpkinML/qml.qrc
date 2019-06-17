@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>CollapsibleGroupBox.qml</file>
+    </qresource>
+</RCC>

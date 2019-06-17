@@ -3,10 +3,7 @@
 #include <QtWidgets>
 #include <QQmlContext>
 
-#include "qml/pumpkin.h"
-
-#include "widgets/verticalgauge.h"
-#include "widgets/circulargauge.h"
+#include "../gauges/pumpkin_gauges.h"
 
 int main(int argc, char *argv[])
 {

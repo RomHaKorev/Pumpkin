@@ -4,7 +4,7 @@
 #include <QQuickPaintedItem>
 #include <QBrush>
 
-#include "../core/gaugeinterface.h"
+#include "../gaugeinterface.h"
 
 template<typename T> class VerticalGaugeRenderer;
 
@@ -14,6 +14,7 @@ class VerticalGaugeQML : public QQuickPaintedItem
 	GAUGE_INTERFACE(qreal)
 public:
 	VerticalGaugeQML(QQuickItem* parent=nullptr);
+	virtual ~VerticalGaugeQML() override {}
 
 	virtual QRectF boundingRect() const override;
 	inline QRectF const contentsBoundingRect() const;
