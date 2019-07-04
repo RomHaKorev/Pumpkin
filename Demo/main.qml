@@ -5,7 +5,7 @@ import QtQuick.Window 2.2
 import QtQuick.Layouts 1.3
 
 import pumpkin.gauges 1.0
-import pumpkin.spinners 1.0
+import pumpkin.controlers 1.0
 
 //import "../boxes/qml"
 
@@ -22,9 +22,10 @@ Item {
 
     RowLayout {
         anchors.fill: parent
-        Spinner
+        ColorPicker
         {
-
+            width: 200
+            height: 200
         }
 
         VerticalGauge {
