@@ -36,7 +36,7 @@ public:
 
 	virtual QRectF brightnessRect() const
 	{
-		qreal const sat = 1 - m_color.saturationF();
+		qreal const sat = m_color.valueF();
 		QLineF l(brightnessBoundingLine());
 		l.setLength(l.length() * sat);
 		return QRectF(-8, -8, 16, 16).translated(l.p2());
@@ -56,17 +56,17 @@ public:
 		if (moveHueCursor)
 		{
 			QLineF distance(hueBoundingRect().center(), event->pos());
-			m_color.setHsv(int(distance.angle()), m_color.saturation(), m_color.value());
+			m_color.setHsv(int(distance.angle()), m_color.value(), m_color.value());
 			update();
 		}
 		else if (moveBrightnessCursor)
 		{
 			QPointF eventPosition(std::max(qreal(brightnessBoundingLine().x1()), qreal(event->pos().x())), event->pos().y());
 			QLineF distance(brightnessBoundingLine().p1(), QPointF(eventPosition.x(), brightnessBoundingLine().y1()));
-			qreal const saturation = (1 - distance.length() / brightnessBoundingLine().length()) * 255;
+			qreal const saturation = (distance.length() / brightnessBoundingLine().length()) * 255;
 			qreal const bounded = std::max(std::min(saturation, 255.0), 0.0);
 			qDebug() << distance << bounded << distance.length() << brightnessBoundingLine().length() << bounded;
-			m_color.setHsv(m_color.hue(), int(bounded), m_color.value());
+			m_color.setHsv(m_color.hue(), m_color.saturation(), int(bounded));
 
 			update();
 		}
