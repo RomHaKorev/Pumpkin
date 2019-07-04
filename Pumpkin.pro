@@ -1,6 +1,9 @@
 TEMPLATE = subdirs
 
 SUBDIRS += gauges \
-    Demo \
     spinners \
-    PumpkinML
+    PumpkinML \
+    Demo
+
+
+Demo.depends = gauges spinners PumpkinML

@@ -4,6 +4,7 @@
 #include <QQmlContext>
 
 #include "../gauges/pumpkin_gauges.h"
+#include "../spinners/spinner.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,6 +15,8 @@ int main(int argc, char *argv[])
 	qmlRegisterType<Brushes>();
 	qmlRegisterType<VerticalGaugeQML>("pumpkin.gauges", 1, 0, "VerticalGauge");
 	qmlRegisterType<CircularGaugeQML>("pumpkin.gauges", 1, 0, "CircularGauge");
+	qmlRegisterType<CircularGaugeQML>("pumpkin.gauges", 1, 0, "CircularGauge");
+	qmlRegisterType<Spinner>("pumpkin.spinners", 1, 0, "Spinner");
 
 
 

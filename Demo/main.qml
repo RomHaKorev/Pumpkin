@@ -5,6 +5,7 @@ import QtQuick.Window 2.2
 import QtQuick.Layouts 1.3
 
 import pumpkin.gauges 1.0
+import pumpkin.spinners 1.0
 
 //import "../boxes/qml"
 
@@ -21,6 +22,11 @@ Item {
 
     RowLayout {
         anchors.fill: parent
+        Spinner
+        {
+
+        }
+
         VerticalGauge {
             minimum: 0
             maximum: 100
