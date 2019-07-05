@@ -2,7 +2,8 @@
 #define COLORPICKERQML_H
 
 #include <QQuickPaintedItem>
-#include <QBrush>
+#include <QTime>
+#include <QLineF>
 
 #include "../colorpickercommon.h"
 
@@ -44,6 +45,7 @@ public:
 
 	virtual void mousePressEvent(QMouseEvent* event) override
 	{
+		lastPressTime.restart();
 		if (hueRect().contains(event->pos()))
 			moveHueCursor = true;
 		else if (brightnessRect().contains(event->pos()))
@@ -63,8 +65,8 @@ public:
 		{
 			QPointF eventPosition(std::max(qreal(brightnessBoundingLine().x1()), qreal(event->pos().x())), event->pos().y());
 			QLineF distance(brightnessBoundingLine().p1(), QPointF(eventPosition.x(), brightnessBoundingLine().y1()));
-			qreal const saturation = (distance.length() / brightnessBoundingLine().length()) * 255;
-			qreal const bounded = std::max(std::min(saturation, 255.0), 0.0);
+			qreal const saturation = (distance.length() / brightnessBoundingLine().length()) * 240;
+			qreal const bounded = std::max(std::min(saturation, 240.0), 0.0);
 			qDebug() << distance << bounded << distance.length() << brightnessBoundingLine().length() << bounded;
 			m_color.setHsv(m_color.hue(), m_color.saturation(), int(bounded));
 
@@ -72,13 +74,27 @@ public:
 		}
 	}
 
-	virtual void mouseReleaseEvent(QMouseEvent* /*event*/) override
+	virtual void mouseReleaseEvent(QMouseEvent* event) override
 	{
 		moveHueCursor = false;
 		moveBrightnessCursor = false;
+		if (lastPressTime.elapsed() < 200)
+			click(event->pos());
 	}
 private:
 	bool moveHueCursor, moveBrightnessCursor;
+	QTime lastPressTime;
+
+	void click(QPointF const& position)
+	{
+		if (okRect().contains(position))
+			validate();
+	}
+
+	void validate()
+	{
+		colorChanged(m_color);
+	}
 };
 
 #endif // COLORPICKERQML_H

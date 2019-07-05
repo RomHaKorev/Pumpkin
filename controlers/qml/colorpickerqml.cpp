@@ -67,5 +67,4 @@ void ColorPickerQML::paint(QPainter* p)
 
 	painter.drawEllipse(brightnessRect());
 	painter.restore();
-	painter.drawRect(hueBoundingRect());
 }
