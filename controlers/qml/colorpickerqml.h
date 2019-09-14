@@ -4,6 +4,9 @@
 #include <QQuickPaintedItem>
 #include <QTime>
 #include <QLineF>
+#include <QBrush>
+#include <QVariantAnimation>
+#include <QSequentialAnimationGroup>
 
 #include "../colorpickercommon.h"
 
@@ -13,6 +16,7 @@ class ColorPickerQML : public QQuickPaintedItem
 {
 	Q_OBJECT
 	COLORPICKER_INTERFACE
+	static QRectF const cursorSize;
 public:
 	ColorPickerQML(QQuickItem* parent=nullptr);
 	virtual ~ColorPickerQML() override {}
@@ -27,7 +31,7 @@ public:
 		QRectF const r = hueBoundingRect();
 		QLineF distance(r.center(), QPointF(r.center().x() + r.width()/2, r.center().y()));
 		distance.setAngle(color().hue());
-		return QRectF(-8, -8, 16, 16).translated(distance.p2());
+		return cursorSize.translated(distance.p2());
 	}
 
 	virtual QRectF okRect() const
@@ -40,7 +44,7 @@ public:
 		qreal const sat = m_color.valueF();
 		QLineF l(brightnessBoundingLine());
 		l.setLength(l.length() * sat);
-		return QRectF(-8, -8, 16, 16).translated(l.p2());
+		return cursorSize.translated(l.p2());
 	}
 
 	virtual void mousePressEvent(QMouseEvent* event) override
@@ -67,9 +71,7 @@ public:
 			QLineF distance(brightnessBoundingLine().p1(), QPointF(eventPosition.x(), brightnessBoundingLine().y1()));
 			qreal const saturation = (distance.length() / brightnessBoundingLine().length()) * 240;
 			qreal const bounded = std::max(std::min(saturation, 240.0), 0.0);
-			qDebug() << distance << bounded << distance.length() << brightnessBoundingLine().length() << bounded;
 			m_color.setHsv(m_color.hue(), m_color.saturation(), int(bounded));
-
 			update();
 		}
 	}
@@ -82,19 +84,30 @@ public:
 			click(event->pos());
 	}
 private:
-	bool moveHueCursor, moveBrightnessCursor;
-	QTime lastPressTime;
-
 	void click(QPointF const& position)
 	{
+		if (!okRect().contains(position))
+			return;
+		validate();
 		if (okRect().contains(position))
-			validate();
+		{
+			sequentialAnimation->setCurrentTime(0);
+			sequentialAnimation->stop();
+			sequentialAnimation->start();
+		}
 	}
 
 	void validate()
 	{
 		colorChanged(m_color);
 	}
+
+private:
+	bool moveHueCursor, moveBrightnessCursor;
+	QVariantAnimation* checkmarkAnimation;
+	QVariantAnimation* textAnimation;
+	QSequentialAnimationGroup* sequentialAnimation;
+	QTime lastPressTime;
 };
 
 #endif // COLORPICKERQML_H
