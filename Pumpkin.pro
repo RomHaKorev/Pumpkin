@@ -3,7 +3,8 @@ TEMPLATE = subdirs
 SUBDIRS += gauges \
     controlers \
     PumpkinML \
-    Demo
+    Demo \
+    itemviews
 
 
 Demo.depends = gauges controlers PumpkinML
