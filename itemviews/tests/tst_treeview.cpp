@@ -3,30 +3,30 @@
 
 // add necessary includes here
 
-class TreeView : public QObject
+class TreeViewUnitTests : public QObject
 {
 	Q_OBJECT
 
 public:
-	TreeView();
-	~TreeView();
+	TreeViewUnitTests();
+	~TreeViewUnitTests();
 
 private slots:
 	void test_case1();
 
 };
 
-TreeView::TreeView()
+TreeViewUnitTests::TreeViewUnitTests()
 {
 
 }
 
-TreeView::~TreeView()
+TreeViewUnitTests::~TreeViewUnitTests()
 {
 
 }
 
-void TreeView::test_case1()
+void TreeViewUnitTests::test_case1()
 {
 
 }
