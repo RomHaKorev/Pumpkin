@@ -1,5 +1,5 @@
 TEMPLATE = lib
-TARGET = QMLLibrary
+TARGET = PumpkinML
 #RESOURCES += qml.qrc
 CONFIG += qtquickcompiler
 

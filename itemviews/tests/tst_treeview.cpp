@@ -30,7 +30,6 @@ void TreeViewUnitTests::test_case1()
 {
 
 }
-
-QTEST_MAIN(TreeView)
+// QTEST_MAIN(TreeView)
 
 #include "tst_treeview.moc"

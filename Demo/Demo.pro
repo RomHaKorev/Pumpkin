@@ -73,3 +73,10 @@ else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../cont
 else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../controlers/qml/release/PumpkinControlers.lib
 else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../controlers/qml/debug/PumpkinControlers.lib
 else:unix: PRE_TARGETDEPS += $$OUT_PWD/../controlers/qml/libPumpkinControlers.a
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../itemviews/treeview/release -lPumpkinTreeQml
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../itemviews/treeview/debug -lPumpkinTreeQml
+else:unix: LIBS += -L$$OUT_PWD/../itemviews/treeview/ -lPumpkinTreeQml
+
+INCLUDEPATH += $$PWD/../itemviews/treeview
+DEPENDPATH += $$PWD/../itemviews/treeview
