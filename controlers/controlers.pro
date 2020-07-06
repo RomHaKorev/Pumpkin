@@ -1,4 +1,3 @@
 TEMPLATE = subdirs
 
-SUBDIRS += qml \
-    widgets
+SUBDIRS += colorpicker

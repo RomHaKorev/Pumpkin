@@ -55,7 +55,6 @@ public:
 		disturbanceAnimation->setEasingCurve(QEasingCurve::OutBounce);
 
 		disturbanceAnimation->setStartValue(0.0);
-		//disturbanceAnimation->setKeyValueAt(0.5, 20.0);
 		disturbanceAnimation->setEndValue(0.0);
 
 		sequentialAnimation->addAnimation(valueAnimation);
@@ -71,7 +70,7 @@ public:
 	{
 		qreal const animatedValue = valueAnimation->currentValue().toReal();
 		qreal const disturbedAngle = this->disturbanceAnimation->currentValue().toDouble();
-		qreal const angle = (180.0 * animatedValue / (parent->maximum() - parent->minimum())) + disturbedAngle;
+		qreal const angle = std::min(180.0, (180.0 * animatedValue / (parent->maximum() - parent->minimum())) + disturbedAngle);
 
 		qreal const thickness = std::min(contentRect.width(), contentRect.height()) / 4.0;
 		QRectF const arcRect(contentRect.adjusted(thickness/2, thickness/2, -thickness/2, -thickness/2));

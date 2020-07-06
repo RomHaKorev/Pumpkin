@@ -42,6 +42,7 @@ knowledge of the CeCILL-C license and that you accept its terms.
 
 #include <QVariantAnimation>
 #include <QSequentialAnimationGroup>
+#include <QPainterPath>
 
 template<typename T> class VerticalGaugeRenderer : public QObject
 {

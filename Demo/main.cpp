@@ -35,15 +35,19 @@ knowledge of the CeCILL-C license and that you accept its terms.
 
 #include <QApplication>
 #include <QQuickWidget>
-#include <QtWidgets>
 #include <QQmlContext>
 
+#include <QtWidgets>
+
+
 #include "../gauges/pumpkin_gauges.h"
-#include "../controlers/pumpkin_controlers.h"
+#include "../controlers/colorpicker/src/qml/colorpickerqml.h"
+#include "../controlers/colorpicker/src/widgets/colorpicker.h"
 
 int main(int argc, char *argv[])
 {
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
 
 	QApplication app(argc, argv);
 
@@ -54,19 +58,15 @@ int main(int argc, char *argv[])
 	qmlRegisterType<ColorPickerQML>("pumpkin.controlers", 1, 0, "ColorPicker");
 
 
-
-	/*QQmlApplicationEngine engine;
-	engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-	if (engine.rootObjects().isEmpty())
-		return -1;*/
-
 	Pumpkin::VerticalGauge* verticalGaugeWidget = new Pumpkin::VerticalGauge();
 	Pumpkin::CircularGauge* circularGaugeWidget = new Pumpkin::CircularGauge();
+	Pumpkin::ColorPicker* colorPicker = new Pumpkin::ColorPicker();
 
 	QWidget* widgets = new QWidget();
 	QGridLayout* grid = new QGridLayout(widgets);
 	grid->addWidget(verticalGaugeWidget);
 	grid->addWidget(circularGaugeWidget);
+	grid->addWidget(colorPicker);
 
 	QQuickWidget *view = new QQuickWidget;
 	view->rootContext()->setContextProperty("verticalGaugeWidget", verticalGaugeWidget);

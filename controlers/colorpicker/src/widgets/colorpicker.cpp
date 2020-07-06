@@ -1,5 +1,5 @@
 /*
-Copyright Romha Korev and Dimitry Ernot (2020-03-30)
+Copyright Romha Korev and dimitry Ernot (2020-03-30)
 
 romha [dot] korev [at] gmail [dot] com
 ernd [dot] mail [at] gmail [dot] com
@@ -33,27 +33,21 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL-C license and that you accept its terms.
 */
 
-#ifndef COLORPICKER_H
-#define COLORPICKER_H
+#include "colorpicker.h"
 
-#include <QWidget>
-#include "../renderers/colorpickerrenderer.h"
-#include "../colorpickercommon.h"
+#include <QPaintEvent>
 
-namespace Pumpkin {
-class ColorPicker : public QWidget
+//QRectF const Pumpkin::ColorPicker::cursorSize = QRectF(-20, -20, 40, 40);
+
+Pumpkin::ColorPicker::ColorPicker(QWidget *parent) : QWidget(parent), ColorPickerBase(new ColorPickerRenderer<Pumpkin::ColorPicker>(this))
 {
-	Q_OBJECT
-	COLORPICKER_INTERFACE
-public:
-	explicit ColorPicker(QWidget *parent = nullptr);
-	virtual void paintEvent(QPaintEvent* event) override;
-
-	virtual QSize sizeHint() const override { return QSize(120, 120); }
-
-private:
-	ColorPickerRenderer<Pumpkin::ColorPicker>* renderer;
-};
+	resize(120, 120);
 }
 
-#endif // COLORPICKER_H
+
+void Pumpkin::ColorPicker::paintEvent(QPaintEvent* event)
+{
+	QPainter painter(this);
+	painter.setClipRegion(event->region());
+	paint(painter);
+}

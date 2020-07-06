@@ -7,5 +7,4 @@ SUBDIRS += gauges \
     Demo \
     itemviews
 
-
 Demo.depends = gauges controlers PumpkinML

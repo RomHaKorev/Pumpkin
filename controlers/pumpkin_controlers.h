@@ -1,5 +1,5 @@
-#include "./qml/colorpickerqml.h"
+#include "./colorpicker/src/qml/colorpickerqml.h"
 
 #ifdef QT_WIDGETS_LIB
-#include "./widgets/colorpicker.h"
+#include "./colorpicker/src/widgets/colorpicker.h"
 #endif

@@ -32,44 +32,31 @@ same conditions as regards security.
 The fact that you are presently reading this means that you have had
 knowledge of the CeCILL-C license and that you accept its terms.
 */
-#ifndef COLORPICKERRENDERER_H
-#define COLORPICKERRENDERER_H
 
-#include <QObject>
-#include <QPainter>
-#include <QDebug>
+#include "colorpickerqml.h"
 
-#include <QVariantAnimation>
-#include <QSequentialAnimationGroup>
+#include "../renderers/colorpickerrenderer.h"
+//QRectF const ColorPickerQML::cursorSize = QRectF(-20, -20, 40, 40);
 
-template<typename T> class ColorPickerRenderer : public QObject
+
+ColorPickerQML::ColorPickerQML(QQuickItem* parent): QQuickPaintedItem (parent), ColorPickerBase (new ColorPickerRenderer<ColorPickerQML>(this))
 {
-public:
-	ColorPickerRenderer(T* parent): QObject(parent), parent(parent)
-	{
-	}
-
-	void paint(QPainter& painter, QRectF const& contentRect)
-	{
-		/*painter.setRenderHint(QPainter::Antialiasing);
-		painter.setPen(Qt::NoPen);
-		painter.setBrush(parent->color());
-		painter.drawRect(contentRect);
-
-		painter.setBrush(Qt::NoBrush);
-		painter.setPen(QPen(Qt::white, 8));
-		painter.drawEllipse(contentRect.adjusted(20, 20, -20, -20));
-
-		painter.setBrush(Qt::white);
-		painter.setPen(Qt::NoPen);
-		painter.drawEllipse(parent.cursorAngle());*/
-	}
+	setAcceptedMouseButtons(Qt::LeftButton);
+}
 
 
-	T* parent;
-	QBrush backgroundBrush;
-	QBrush foregroundBrush;
-	QPen boderPen;
-};
+QRectF ColorPickerQML::boundingRect() const
+{
+	return QRectF(QPointF(0, 0), size());
+}
 
-#endif // COLORPICKERRENDERER_H
+void ColorPickerQML::paint(QPainter* p)
+{
+	ColorPickerBase::paint(*p);
+}
+
+
+void ColorPickerQML::validate()
+{
+	colorChanged(color());
+}

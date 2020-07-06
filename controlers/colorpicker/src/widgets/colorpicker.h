@@ -1,5 +1,5 @@
 /*
-Copyright Romha Korev and dimitry Ernot (2020-03-30)
+Copyright Romha Korev and Dimitry Ernot (2020-03-30)
 
 romha [dot] korev [at] gmail [dot] com
 ernd [dot] mail [at] gmail [dot] com
@@ -33,20 +33,50 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL-C license and that you accept its terms.
 */
 
-#include "colorpicker.h"
+#ifndef COLORPICKER_H
+#define COLORPICKER_H
 
-#include <QDebug>
+#include <QWidget>
+#include "../renderers/colorpickerrenderer.h"
+#include "../colorpickercommon.h"
+#include "../renderers/colorpickerbase.h"
 
-Pumpkin::ColorPicker::ColorPicker(QWidget *parent) : QWidget(parent),
-	renderer(new ColorPickerRenderer<Pumpkin::ColorPicker>(this))
+namespace Pumpkin {
+class ColorPicker : public QWidget, public ColorPickerBase
 {
-	resize(120, 120);
+	Q_OBJECT
+	COLORPICKER_INTERFACE
+public:
+	explicit ColorPicker(QWidget *parent = nullptr);
+	virtual void paintEvent(QPaintEvent* event) override;
+
+	virtual QSize sizeHint() const override { return QSize(120, 120); }
+
+	virtual void updateColor() override
+	{
+		update();
+	}
+
+	virtual void validate() override
+	{
+		colorChanged(color());
+	}
+
+	virtual void mousePressEvent(QMouseEvent* event) override
+	{
+		handleMousePressEvent(event);
+	}
+
+	virtual void mouseMoveEvent(QMouseEvent* event) override
+	{
+		handleMouseMoveEvent(event);
+	}
+	virtual void mouseReleaseEvent(QMouseEvent* event) override
+	{
+		handleMouseReleaseEvent(event);
+	}
+};
+
 }
 
-
-void Pumpkin::ColorPicker::paintEvent(QPaintEvent* /*event*/)
-{
-	QRectF const contentsRect(QPointF(0, 0), size());
-	QPainter painter(this);
-	renderer->paint(painter, contentsRect);
-}
+#endif // COLORPICKER_H

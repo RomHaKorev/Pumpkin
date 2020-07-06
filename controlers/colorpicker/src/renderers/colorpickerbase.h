@@ -2,13 +2,13 @@
 CeCILL-C FREE SOFTWARE LICENSE AGREEMENT
 
 
-    Notice
+	Notice
 
 This Agreement is a Free Software license agreement that is the result
 of discussions between its authors in order to ensure compliance with
 the two main principles guiding its drafting:
 
-    * firstly, compliance with the principles governing the distribution
+	* firstly, compliance with the principles governing the distribution
 	  of Free Software: access to source code, broad rights granted to
 	  users,
 	* secondly, the election of a governing law, French law, with which
@@ -33,7 +33,7 @@ principal place of business at Domaine de Voluceau, Rocquencourt, BP
 105, 78153 Le Chesnay cedex, France.
 
 
-    Preamble
+	Preamble
 
 The purpose of this Free Software license agreement is to grant users
 the right to modify and re-use the software governed by this license.
@@ -64,7 +64,7 @@ This Agreement may apply to any or all software for which the holder of
 the economic rights decides to submit the use thereof to its provisions.
 
 
-    Article 1 - DEFINITIONS
+	Article 1 - DEFINITIONS
 
 For the purpose of this Agreement, when the following expressions
 commence with a capital letter, they shall have the following meaning:
@@ -117,7 +117,7 @@ Parties: mean both the Licensee and the Licensor.
 These expressions may be used both in singular and plural form.
 
 
-    Article 2 - PURPOSE
+	Article 2 - PURPOSE
 
 The purpose of the Agreement is the grant by the Licensor to the
 Licensee of a non-exclusive, transferable and worldwide license for the
@@ -125,13 +125,13 @@ Software as set forth in Article 5 hereinafter for the whole term of the
 protection granted by the rights over said Software.
 
 
-    Article 3 - ACCEPTANCE
+	Article 3 - ACCEPTANCE
 
 3.1 The Licensee shall be deemed as having accepted the terms and
 conditions of this Agreement upon the occurrence of the first of the
 following events:
 
-    * (i) loading the Software by any or all means, notably, by
+	* (i) loading the Software by any or all means, notably, by
 	  downloading from a remote server, or by loading from a physical
 	  medium;
 	* (ii) the first time the Licensee exercises any of the rights
@@ -145,22 +145,22 @@ hereinabove, and the Licensee hereby acknowledges that it has read and
 understood it.
 
 
-    Article 4 - EFFECTIVE DATE AND TERM
+	Article 4 - EFFECTIVE DATE AND TERM
 
 
-      4.1 EFFECTIVE DATE
+	  4.1 EFFECTIVE DATE
 
 The Agreement shall become effective on the date when it is accepted by
 the Licensee as set forth in Article 3.1.
 
 
-      4.2 TERM
+	  4.2 TERM
 
 The Agreement shall remain in force for the entire legal term of
 protection of the economic rights over the Software.
 
 
-    Article 5 - SCOPE OF RIGHTS GRANTED
+	Article 5 - SCOPE OF RIGHTS GRANTED
 
 The Licensor hereby grants to the Licensee, who accepts, the following
 rights over the Software for any or all use, and for the term of the
@@ -175,27 +175,27 @@ undertakes to have the transferees subscribe to the obligations set
 forth in this paragraph.
 
 
-      5.1 RIGHT OF USE
+	  5.1 RIGHT OF USE
 
 The Licensee is authorized to use the Software, without any limitation
 as to its fields of application, with it being hereinafter specified
 that this comprises:
 
    1. permanent or temporary reproduction of all or part of the Software
-      by any or all means and in any or all form.
+	  by any or all means and in any or all form.
 
    2. loading, displaying, running, or storing the Software on any or
-      all medium.
+	  all medium.
 
    3. entitlement to observe, study or test its operation so as to
-      determine the ideas and principles behind any or all constituent
+	  determine the ideas and principles behind any or all constituent
 	  elements of said Software. This shall apply when the Licensee
 	  carries out any or all loading, displaying, running, transmission
 	  or storage operation as regards the Software, that it is entitled
 	  to carry out hereunder.
 
 
-      5.2 RIGHT OF MODIFICATION
+	  5.2 RIGHT OF MODIFICATION
 
 The right of modification includes the right to translate, adapt,
 arrange, or make any or all modifications to the Software, and the right
@@ -207,7 +207,7 @@ Software provided that it includes an explicit notice that it is the
 author of said modification and indicates the date of the creation thereof.
 
 
-      5.3 RIGHT OF DISTRIBUTION
+	  5.3 RIGHT OF DISTRIBUTION
 
 In particular, the right of distribution includes the right to publish,
 transmit and communicate the Software to the general public on any or
@@ -220,7 +220,7 @@ or unmodified Software to third parties according to the terms and
 conditions set forth hereinafter.
 
 
-        5.3.1 DISTRIBUTION OF SOFTWARE WITHOUT MODIFICATION
+		5.3.1 DISTRIBUTION OF SOFTWARE WITHOUT MODIFICATION
 
 The Licensee is authorized to distribute true copies of the Software in
 Source Code or Object Code form, provided that said distribution
@@ -229,7 +229,7 @@ complies with all the provisions of the Agreement and is accompanied by:
    1. a copy of the Agreement,
 
    2. a notice relating to the limitation of both the Licensor's
-      warranty and liability as set forth in Articles 8 and 9,
+	  warranty and liability as set forth in Articles 8 and 9,
 
 and that, in the event that only the Object Code of the Software is
 redistributed, the Licensee allows effective access to the full Source
@@ -239,7 +239,7 @@ cost of acquiring the Source Code shall not exceed the cost of
 transferring the data.
 
 
-        5.3.2 DISTRIBUTION OF MODIFIED SOFTWARE
+		5.3.2 DISTRIBUTION OF MODIFIED SOFTWARE
 
 When the Licensee makes an Integrated Contribution to the Software, the
 terms and conditions for the distribution of the resulting Modified
@@ -252,7 +252,7 @@ complies with all the provisions of the Agreement and is accompanied by:
    1. a copy of the Agreement,
 
    2. a notice relating to the limitation of both the Licensor's
-      warranty and liability as set forth in Articles 8 and 9,
+	  warranty and liability as set forth in Articles 8 and 9,
 
 and that, in the event that only the object code of the Modified
 Software is redistributed, the Licensee allows effective access to the
@@ -262,7 +262,7 @@ that the additional cost of acquiring the source code shall not exceed
 the cost of transferring the data.
 
 
-        5.3.3 DISTRIBUTION OF DERIVATIVE SOFTWARE
+		5.3.3 DISTRIBUTION OF DERIVATIVE SOFTWARE
 
 When the Licensee creates Derivative Software, this Derivative Software
 may be distributed under a license agreement other than this Agreement,
@@ -273,9 +273,9 @@ of the Source Code, the Licensee undertakes that:
 
    1. the resulting Modified Software will be governed by this Agreement,
    2. the Integrated Contributions in the resulting Modified Software
-      will be clearly identified and documented,
+	  will be clearly identified and documented,
    3. the Licensee will allow effective access to the source code of the
-      Modified Software, at a minimum during the entire period of
+	  Modified Software, at a minimum during the entire period of
 	  distribution of the Derivative Software, such that such
 	  modifications may be carried over in a subsequent version of the
 	  Software; it being understood that the additional cost of
@@ -283,7 +283,7 @@ of the Source Code, the Licensee undertakes that:
 	  exceed the cost of transferring the data.
 
 
-        5.3.4 COMPATIBILITY WITH THE CeCILL LICENSE
+		5.3.4 COMPATIBILITY WITH THE CeCILL LICENSE
 
 When a Modified Software contains an Integrated Contribution subject to
 the CeCILL license agreement, or when a Derivative Software contains a
@@ -291,10 +291,10 @@ Related Module subject to the CeCILL license agreement, the provisions
 set forth in the third item of Article 6.4 are optional.
 
 
-    Article 6 - INTELLECTUAL PROPERTY
+	Article 6 - INTELLECTUAL PROPERTY
 
 
-      6.1 OVER THE INITIAL SOFTWARE
+	  6.1 OVER THE INITIAL SOFTWARE
 
 The Holder owns the economic rights over the Initial Software. Any or
 all use of the Initial Software is subject to compliance with the terms
@@ -306,14 +306,14 @@ The Holder undertakes that the Initial Software will remain ruled at
 least by this Agreement, for the duration set forth in Article 4.2.
 
 
-      6.2 OVER THE INTEGRATED CONTRIBUTIONS
+	  6.2 OVER THE INTEGRATED CONTRIBUTIONS
 
 The Licensee who develops an Integrated Contribution is the owner of the
 intellectual property rights over this Contribution as defined by
 applicable law.
 
 
-      6.3 OVER THE RELATED MODULES
+	  6.3 OVER THE RELATED MODULES
 
 The Licensee who develops a Related Module is the owner of the
 intellectual property rights over this Related Module as defined by
@@ -321,18 +321,18 @@ applicable law and is free to choose the type of agreement that shall
 govern its distribution under the conditions defined in Article 5.3.3.
 
 
-      6.4 NOTICE OF RIGHTS
+	  6.4 NOTICE OF RIGHTS
 
 The Licensee expressly undertakes:
 
    1. not to remove, or modify, in any manner, the intellectual property
-      notices attached to the Software;
+	  notices attached to the Software;
 
    2. to reproduce said notices, in an identical manner, in the copies
-      of the Software modified or not;
+	  of the Software modified or not;
 
    3. to ensure that use of the Software, its intellectual property
-      notices and the fact that it is governed by the Agreement is
+	  notices and the fact that it is governed by the Agreement is
 	  indicated in a text that is easily accessible, specifically from
 	  the interface of any Derivative Software.
 
@@ -343,7 +343,7 @@ measures required to ensure respect of said intellectual property rights
 of the Holder and/or Contributors.
 
 
-    Article 7 - RELATED SERVICES
+	Article 7 - RELATED SERVICES
 
 7.1 Under no circumstances shall the Agreement oblige the Licensor to
 provide technical assistance or maintenance services for the Software.
@@ -363,7 +363,7 @@ shall be subject of a separate instrument executed between the Licensor
 and the Licensee.
 
 
-    Article 8 - LIABILITY
+	Article 8 - LIABILITY
 
 8.1 Subject to the provisions of Article 8.2, the Licensee shall be
 entitled to claim compensation for any direct loss it may have suffered
@@ -384,7 +384,7 @@ shall constitute consequential loss and shall not provide entitlement to
 any or all compensation from the Licensor.
 
 
-    Article 9 - WARRANTY
+	Article 9 - WARRANTY
 
 9.1 The Licensee acknowledges that the scientific and technical
 state-of-the-art when the Software was distributed did not enable all
@@ -431,7 +431,7 @@ prior rights over the name of the Software or as regards the existence
 of a trademark.
 
 
-    Article 10 - TERMINATION
+	Article 10 - TERMINATION
 
 10.1 In the event of a breach by the Licensee of its obligations
 hereunder, the Licensor may automatically terminate this Agreement
@@ -445,10 +445,10 @@ shall remain valid subject to their having been granted in compliance
 with the terms and conditions hereof.
 
 
-    Article 11 - MISCELLANEOUS
+	Article 11 - MISCELLANEOUS
 
 
-      11.1 EXCUSABLE EVENTS
+	  11.1 EXCUSABLE EVENTS
 
 Neither Party shall be liable for any or all delay, or failure to
 perform the Agreement, that may be attributable to an event of force
@@ -480,13 +480,13 @@ of a provision of the Agreement, for any reason whatsoever, shall not
 cause the Agreement as a whole to be invalid.
 
 
-      11.5 LANGUAGE
+	  11.5 LANGUAGE
 
 The Agreement is drafted in both French and English and both versions
 are deemed authentic.
 
 
-    Article 12 - NEW VERSIONS OF THE AGREEMENT
+	Article 12 - NEW VERSIONS OF THE AGREEMENT
 
 12.1 Any person is authorized to duplicate and distribute copies of this
 Agreement.
@@ -502,7 +502,7 @@ only be subsequently distributed under the same version of the Agreement
 or a subsequent version.
 
 
-    Article 13 - GOVERNING LAW AND JURISDICTION
+	Article 13 - GOVERNING LAW AND JURISDICTION
 
 13.1 The Agreement is governed by French law. The Parties agree to
 endeavor to seek an amicable solution to any disagreements or disputes
@@ -519,3 +519,66 @@ Version 1.0 dated 2006-09-05.
 
 
 
+#ifndef COLORPICKERBASE_H
+#define COLORPICKERBASE_H
+
+#include <QRectF>
+#include <QColor>
+#include <QMouseEvent>
+#include <QElapsedTimer>
+
+#include "colorpickerrenderer.h"
+
+class ColorPickerBase
+{
+private:
+	QColor m_color;
+	QPointF cursorPosition;
+	void init() { cursorPosition = QPointF(60, 20); }
+
+public:
+	ColorPickerBase(ColorPickerRendererBase* renderer): renderer(renderer)
+	{
+		init();
+		m_color = Qt::red;
+	}
+
+	virtual ~ColorPickerBase()
+	{
+		delete renderer;
+	}
+
+	void paint(QPainter& painter)
+	{
+		renderer->paint(painter);
+	}
+
+	virtual void handleMousePressEvent(QMouseEvent* event);
+	virtual void handleMouseMoveEvent(QMouseEvent* event);
+	virtual void handleMouseReleaseEvent(QMouseEvent* event);
+
+	virtual void updateColor() = 0;
+
+	inline QColor color() const { return m_color; }
+	inline int brightness() const { return m_color.saturation(); }
+	virtual void setColor(QColor const& newValue)
+	{
+		m_color = newValue;
+	}
+
+	virtual void setBrightness(int newValue)
+	{
+		m_color.setHsv(m_color.hue(), newValue, m_color.value());
+	}
+
+private:
+	void click(QPointF const& position);
+	virtual void validate() = 0;
+
+	bool moveHueCursor, moveBrightnessCursor;
+	QElapsedTimer lastPressTime;
+	ColorPickerRendererBase* renderer;
+};
+
+
+#endif // COLORPICKERBASE_H
