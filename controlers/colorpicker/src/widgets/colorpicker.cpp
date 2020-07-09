@@ -48,6 +48,6 @@ Pumpkin::ColorPicker::ColorPicker(QWidget *parent) : QWidget(parent), ColorPicke
 void Pumpkin::ColorPicker::paintEvent(QPaintEvent* event)
 {
 	QPainter painter(this);
-	painter.setClipRegion(event->region());
+	//painter.setClipRegion(event->region());
 	paint(painter);
 }

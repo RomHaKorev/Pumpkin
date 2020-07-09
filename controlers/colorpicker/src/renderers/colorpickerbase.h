@@ -540,7 +540,7 @@ public:
 	ColorPickerBase(ColorPickerRendererBase* renderer): renderer(renderer)
 	{
 		init();
-		m_color = Qt::red;
+		m_color = QColor(0, 194, 173);
 	}
 
 	virtual ~ColorPickerBase()

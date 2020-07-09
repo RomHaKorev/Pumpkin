@@ -45,24 +45,8 @@ knowledge of the CeCILL-C license and that you accept its terms.
 
 
 #include "colorpickeranimator.h"
-//#include "colorpickerbase.h"
 
-
-class ColorPickerRendererBase
-{
-public:
-	QRectF const cursorSize = QRectF(-20, -20, 40, 40);
-	virtual QRectF boundingRect() const = 0;
-	virtual QRectF const hueBoundingRect() const = 0;
-	virtual QLineF const brightnessBoundingLine() const = 0;
-	virtual QRectF hueRect() const = 0;
-	virtual QRectF okRect() const = 0;
-	virtual QRectF brightnessRect() const = 0;
-	virtual void paint(QPainter& painter) = 0;
-	virtual void restartButtonAnimation() = 0;
-
-	virtual ~ColorPickerRendererBase() = default;
-};
+#include "colorpickerrendererbase.h"
 
 template<typename T> class ColorPickerRenderer : public QObject, public ColorPickerRendererBase
 {
@@ -87,17 +71,14 @@ public:
 	QRectF const hueBoundingRect() const
 	{
 		QRectF const r = boundingRect();
-
-		qreal const heightWoBrightnessPart = r.height() - cursorSize.width();
-		qreal const w = std::min(r.width(), heightWoBrightnessPart);
+		qreal const w = std::min(r.width(), r.height());
 		qreal const offset = cursorSize.width();
 		return QRectF(boundingRect().center() - QPointF(w/2, w/2 + 20), QSizeF(w, w)).adjusted(offset, offset, -offset, -offset);
 	}
 
-	QLineF const brightnessBoundingLine() const
+	QRectF const brightnessBoundingRect() const
 	{
-		QRectF const contentRect = hueBoundingRect();
-		return QLineF(contentRect.left(), contentRect.bottom() + cursorSize.width(), contentRect.right(), contentRect.bottom() + cursorSize.width());
+		return hueBoundingRect().adjusted(20, 20, -20, -20);
 	}
 
 	virtual QRectF hueRect() const
@@ -115,10 +96,18 @@ public:
 
 	virtual QRectF brightnessRect() const
 	{
-		qreal const sat = parent->color().valueF();
-		QLineF l(brightnessBoundingLine());
-		l.setLength(l.length() * sat);
-		return cursorSize.translated(l.p2());
+		QRectF const r = brightnessBoundingRect();
+		QLineF distance(r.center(), QPointF(r.center().x() + r.width()/2, r.center().y()));
+		qreal value = parent->color().value() * 90.0 / 255.0;
+		qreal saturation = 90 + (255 - parent->color().saturation()) * 90.0 / 255;
+		qreal angle = 0;
+		if (value < 90)
+			angle  = value;
+		else
+			angle = saturation;
+
+		distance.setAngle(angle);
+		return cursorSize.translated(distance.p2());
 	}
 
 
@@ -139,7 +128,7 @@ public:
 		painter.setPen(QPen(borderWhite, 4));
 		painter.drawEllipse(contentRect);
 
-		painter.drawLine(brightnessBoundingLine());
+		painter.drawArc(brightnessBoundingRect(), 0, 180 * 16);
 
 		painter.setPen(Qt::NoPen);
 		painter.setBrush(borderWhite);
@@ -177,8 +166,8 @@ public:
 		painter.drawEllipse(brightnessRect());
 		painter.drawEllipse(hueRect());
 		painter.setBrush(white);
-		painter.drawEllipse(brightnessRect().adjusted(6, 6, -6, -6));
-		painter.drawEllipse(hueRect().adjusted(6, 6, -6, -6));
+		painter.drawEllipse(brightnessRect().adjusted(4, 4, -4, -4));
+		painter.drawEllipse(hueRect().adjusted(4, 4, -4, -4));
 
 		painter.restore();
 	}
@@ -191,6 +180,7 @@ private:
 	QBrush backgroundBrush;
 	QBrush foregroundBrush;
 	QPen boderPen;
+
 
 	ColorPickerAnimator* animator;
 };

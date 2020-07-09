@@ -519,58 +519,28 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#include "colorpickerbase.h"
+#ifndef COLORPICKERRENDERERBASE_H
+#define COLORPICKERRENDERERBASE_H
 
+#include <QRectF>
 
-void ColorPickerBase::handleMousePressEvent(QMouseEvent *event)
+class QPainter;
+
+class ColorPickerRendererBase
 {
-	lastPressTime.restart();
-	if (renderer->hueRect().contains(event->pos()))
-		moveHueCursor = true;
-	else if (renderer->brightnessRect().contains(event->pos()))
-		moveBrightnessCursor = true;
+public:
+	QRectF const cursorSize = QRectF(-10, -10, 20, 20);
+	virtual QRectF boundingRect() const = 0;
+	virtual QRectF const hueBoundingRect() const = 0;
+	virtual QRectF const brightnessBoundingRect() const = 0;
+	virtual QRectF hueRect() const = 0;
+	virtual QRectF okRect() const = 0;
+	virtual QRectF brightnessRect() const = 0;
+	virtual void paint(QPainter& painter) = 0;
+	virtual void restartButtonAnimation() = 0;
 
-}
+	virtual ~ColorPickerRendererBase() = default;
+	qreal testAngle;
+};
 
-void ColorPickerBase::handleMouseMoveEvent(QMouseEvent *event)
-{
-	if (moveHueCursor)
-	{
-		QLineF distance(renderer->hueBoundingRect().center(), event->pos());
-		m_color.setHsv(int(distance.angle()), m_color.saturation(), m_color.value());
-		updateColor();
-	}
-	else if (moveBrightnessCursor)
-	{
-		QLineF distance(renderer->brightnessBoundingRect().center(), event->pos());
-		qreal a = qMax(0.0, distance.angle());
-		if (a > 270)
-			a = 0;
-		else if (a > 180)
-			a = 180;
-
-		qreal value = qMin(a / 90.0 * 255, 255.0);
-		qreal saturation = qMin(255 - (a - 90) / 90.0 * 255, 255.0);
-		m_color.setHsv(m_color.hue(), saturation, value);
-
-		this->renderer->testAngle = a;
-		updateColor();
-	}
-}
-
-void ColorPickerBase::handleMouseReleaseEvent(QMouseEvent *event)
-{
-	moveHueCursor = false;
-	moveBrightnessCursor = false;
-	if (lastPressTime.elapsed() < 200)
-		click(event->pos());
-}
-
-void ColorPickerBase::click(const QPointF &position)
-{
-	if (!renderer->okRect().contains(position))
-		return;
-	validate();
-	if (renderer->okRect().contains(position))
-		renderer->restartButtonAnimation();
-}
+#endif // COLORPICKERRENDERERBASE_H

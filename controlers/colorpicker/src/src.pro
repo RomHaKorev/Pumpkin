@@ -7,6 +7,7 @@ TARGET = PumpkinControlers
 HEADERS += \
     qml/colorpickerqml.h \
     renderers/colorpickerrenderer.h \
+    renderers/colorpickerrendererbase.h \
     widgets/colorpicker.h \
     renderers/colorpickeranimator.h \
     renderers/colorpickerbase.h
