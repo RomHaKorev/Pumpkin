@@ -33,53 +33,29 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL-C license and that you accept its terms.
 */
 
-#include "colorpicker.h"
+#ifndef CIRCULARGAUGE_H
+#define CIRCULARGAUGE_H
 
-#include <QPaintEvent>
+#include <QWidget>
 
-Pumpkin::ColorPicker::ColorPicker(QWidget *parent) : QWidget(parent), ColorPickerBase(new ColorPickerRenderer(this, this))
+#include "../common/gaugeinterface.h"
+#include "../common/circulargaugerenderer.h"
+
+namespace Pumpkin {
+class CircularGauge : public QWidget
 {
-	resize(120, 120);
+	Q_OBJECT
+	GAUGE_INTERFACE(qreal)
+
+public:
+	explicit CircularGauge(QWidget *parent = nullptr);
+	virtual void paintEvent(QPaintEvent* event) override;
+
+	virtual QSize sizeHint() const override { return QSize(40, 120); }
+
+private:
+	CircularGaugeRenderer<Pumpkin::CircularGauge>* renderer;
+};
 }
 
-
-void Pumpkin::ColorPicker::paintEvent(QPaintEvent* event)
-{
-	QPainter painter(this);
-	paint(painter);
-}
-
-void Pumpkin::ColorPicker::updateColor()
-{
-	update();
-}
-
-void Pumpkin::ColorPicker::validate()
-{
-	colorChanged(color());
-}
-
-void Pumpkin::ColorPicker::mousePressEvent(QMouseEvent *event)
-{
-	handleMousePressEvent(event);
-}
-
-void Pumpkin::ColorPicker::mouseMoveEvent(QMouseEvent *event)
-{
-	handleMouseMoveEvent(event);
-}
-
-void Pumpkin::ColorPicker::mouseReleaseEvent(QMouseEvent *event)
-{
-	handleMouseReleaseEvent(event);
-}
-
-void Pumpkin::ColorPicker::updateArea(const QRect &area)
-{
-	this->update(area);
-}
-
-QSizeF Pumpkin::ColorPicker::size() const
-{
-	return QWidget::size();
-}
+#endif // CIRCULARGAUGE_H

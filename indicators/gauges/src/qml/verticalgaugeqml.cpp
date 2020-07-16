@@ -33,53 +33,31 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL-C license and that you accept its terms.
 */
 
-#include "colorpicker.h"
+#include "verticalgaugeqml.h"
 
-#include <QPaintEvent>
+#include "../common/verticalgaugerenderer.h"
 
-Pumpkin::ColorPicker::ColorPicker(QWidget *parent) : QWidget(parent), ColorPickerBase(new ColorPickerRenderer(this, this))
+VerticalGaugeQML::VerticalGaugeQML(QQuickItem* parent): QQuickPaintedItem (parent),
+	renderer(new VerticalGaugeRenderer<VerticalGaugeQML>(this))
 {
-	resize(120, 120);
+	init();
+	setSize(QSizeF(40, 120));
 }
 
 
-void Pumpkin::ColorPicker::paintEvent(QPaintEvent* event)
+QRectF VerticalGaugeQML::boundingRect() const
 {
-	QPainter painter(this);
-	paint(painter);
+	return QRectF(QPointF(0, 0), size());
 }
 
-void Pumpkin::ColorPicker::updateColor()
+
+QRectF const VerticalGaugeQML::contentsBoundingRect() const
 {
-	update();
+	return boundingRect().adjusted(2, 2, -2, -2);
 }
 
-void Pumpkin::ColorPicker::validate()
-{
-	colorChanged(color());
-}
 
-void Pumpkin::ColorPicker::mousePressEvent(QMouseEvent *event)
+void VerticalGaugeQML::paint(QPainter* painter)
 {
-	handleMousePressEvent(event);
-}
-
-void Pumpkin::ColorPicker::mouseMoveEvent(QMouseEvent *event)
-{
-	handleMouseMoveEvent(event);
-}
-
-void Pumpkin::ColorPicker::mouseReleaseEvent(QMouseEvent *event)
-{
-	handleMouseReleaseEvent(event);
-}
-
-void Pumpkin::ColorPicker::updateArea(const QRect &area)
-{
-	this->update(area);
-}
-
-QSizeF Pumpkin::ColorPicker::size() const
-{
-	return QWidget::size();
+	renderer->paint(*painter, contentsBoundingRect());
 }

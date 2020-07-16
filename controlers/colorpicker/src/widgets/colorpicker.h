@@ -37,9 +37,9 @@ knowledge of the CeCILL-C license and that you accept its terms.
 #define COLORPICKER_H
 
 #include <QWidget>
-#include "../renderers/colorpickerrenderer.h"
+#include "../common/colorpickerrenderer.h"
 #include "../colorpickercommon.h"
-#include "../renderers/colorpickerbase.h"
+#include "../common/colorpickerbase.h"
 
 namespace Pumpkin {
 class ColorPicker : public QWidget, public ColorPickerBase
@@ -52,29 +52,16 @@ public:
 
 	virtual QSize sizeHint() const override { return QSize(120, 120); }
 
-	virtual void updateColor() override
-	{
-		update();
-	}
+	virtual void updateColor() override;
+	virtual void validate() override;
 
-	virtual void validate() override
-	{
-		colorChanged(color());
-	}
+	virtual void mousePressEvent(QMouseEvent* event) override;
+	virtual void mouseMoveEvent(QMouseEvent* event) override;
+	virtual void mouseReleaseEvent(QMouseEvent* event) override;
 
-	virtual void mousePressEvent(QMouseEvent* event) override
-	{
-		handleMousePressEvent(event);
-	}
-
-	virtual void mouseMoveEvent(QMouseEvent* event) override
-	{
-		handleMouseMoveEvent(event);
-	}
-	virtual void mouseReleaseEvent(QMouseEvent* event) override
-	{
-		handleMouseReleaseEvent(event);
-	}
+public:
+	virtual void updateArea(const QRect &area) override;
+	virtual QSizeF size() const override;
 };
 
 }

@@ -5,17 +5,22 @@ CONFIG += c++11 staticlib
 TARGET = PumpkinControlers
 
 HEADERS += \
+    common/util/colortoangleconverter.h \
+    common/util/cursorcolorizer.h \
     qml/colorpickerqml.h \
-    renderers/colorpickerrenderer.h \
-    renderers/colorpickerrendererbase.h \
-    widgets/colorpicker.h \
-    renderers/colorpickeranimator.h \
-    renderers/colorpickerbase.h
+	common/colorpickerrenderer.h \
+	common/colorpickerrendererbase.h \
+	widgets/colorpicker.h \
+	common/colorpickeranimator.h \
+	common/colorpickerbase.h
 
 SOURCES += \
-    qml/colorpickerqml.cpp \
-    widgets/colorpicker.cpp \
-    renderers/colorpickeranimator.cpp \
-    renderers/colorpickerbase.cpp
+    common/colorpickerrenderer.cpp \
+	common/colorpickeranimator.cpp \
+	common/colorpickerbase.cpp \
+    common/util/colortoangleconverter.cpp \
+    common/util/cursorcolorizer.cpp \
+	qml/colorpickerqml.cpp \
+	widgets/colorpicker.cpp
 
 

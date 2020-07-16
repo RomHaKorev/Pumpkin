@@ -34,12 +34,9 @@ knowledge of the CeCILL-C license and that you accept its terms.
 */
 
 #include "colorpickerqml.h"
+#include "../common/colorpickerrenderer.h"
 
-#include "../renderers/colorpickerrenderer.h"
-//QRectF const ColorPickerQML::cursorSize = QRectF(-20, -20, 40, 40);
-
-
-ColorPickerQML::ColorPickerQML(QQuickItem* parent): QQuickPaintedItem (parent), ColorPickerBase (new ColorPickerRenderer<ColorPickerQML>(this))
+ColorPickerQML::ColorPickerQML(QQuickItem* parent): QQuickPaintedItem (parent), ColorPickerBase (new ColorPickerRenderer(this, this))
 {
 	setAcceptedMouseButtons(Qt::LeftButton);
 }
@@ -47,7 +44,7 @@ ColorPickerQML::ColorPickerQML(QQuickItem* parent): QQuickPaintedItem (parent), 
 
 QRectF ColorPickerQML::boundingRect() const
 {
-	return QRectF(QPointF(0, 0), size());
+	return QRectF(QPointF(0, 0), QQuickPaintedItem::size());
 }
 
 void ColorPickerQML::paint(QPainter* p)
@@ -59,4 +56,14 @@ void ColorPickerQML::paint(QPainter* p)
 void ColorPickerQML::validate()
 {
 	colorChanged(color());
+}
+
+void ColorPickerQML::updateArea(const QRect &area)
+{
+	this->update(area);
+}
+
+QSizeF ColorPickerQML::size() const
+{
+	return QQuickPaintedItem::size();
 }

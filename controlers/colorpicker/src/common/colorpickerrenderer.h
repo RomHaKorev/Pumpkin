@@ -32,54 +32,52 @@ same conditions as regards security.
 The fact that you are presently reading this means that you have had
 knowledge of the CeCILL-C license and that you accept its terms.
 */
+#ifndef COLORPICKERRENDERER_H
+#define COLORPICKERRENDERER_H
 
-#include "colorpicker.h"
+#include <QObject>
+#include <QPainter>
+#include <QDebug>
 
-#include <QPaintEvent>
+#include <QVariantAnimation>
+#include <QSequentialAnimationGroup>
+#include <QPainterPath>
 
-Pumpkin::ColorPicker::ColorPicker(QWidget *parent) : QWidget(parent), ColorPickerBase(new ColorPickerRenderer(this, this))
+
+#include "colorpickeranimator.h"
+
+#include "colorpickerrendererbase.h"
+#include "util/cursorcolorizer.h"
+
+class ColorPickerBase;
+
+class ColorPickerRenderer : public QObject, public ColorPickerRendererBase
 {
-	resize(120, 120);
-}
+public:
+	ColorPickerRenderer(ColorPickerBase* base, QObject* parent);
+	virtual ~ColorPickerRenderer();
 
+	QRectF boundingRect() const;
+	QRectF const hueBoundingRect() const;
+	QRectF const brightnessBoundingRect() const;
+	virtual QRectF hueRect() const;
+	virtual QRectF okRect() const;
+	virtual QRectF brightnessRect() const;
 
-void Pumpkin::ColorPicker::paintEvent(QPaintEvent* event)
-{
-	QPainter painter(this);
-	paint(painter);
-}
+	void paint(QPainter& painter);
 
-void Pumpkin::ColorPicker::updateColor()
-{
-	update();
-}
+	void restartButtonAnimation();
 
-void Pumpkin::ColorPicker::validate()
-{
-	colorChanged(color());
-}
+private:
+	void paintButton(QPainter& painter, QColor const backgroundColor, QColor const& border);
 
-void Pumpkin::ColorPicker::mousePressEvent(QMouseEvent *event)
-{
-	handleMousePressEvent(event);
-}
+	ColorPickerBase* base;
+	QBrush backgroundBrush;
+	QBrush foregroundBrush;
+	QPen boderPen;
+	ColorPickerAnimator* animator;
+	CursorColorizer cursorColor;
+};
 
-void Pumpkin::ColorPicker::mouseMoveEvent(QMouseEvent *event)
-{
-	handleMouseMoveEvent(event);
-}
+#endif // COLORPICKERRENDERER_H
 
-void Pumpkin::ColorPicker::mouseReleaseEvent(QMouseEvent *event)
-{
-	handleMouseReleaseEvent(event);
-}
-
-void Pumpkin::ColorPicker::updateArea(const QRect &area)
-{
-	this->update(area);
-}
-
-QSizeF Pumpkin::ColorPicker::size() const
-{
-	return QWidget::size();
-}

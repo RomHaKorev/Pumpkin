@@ -40,9 +40,12 @@ knowledge of the CeCILL-C license and that you accept its terms.
 #include <QtWidgets>
 
 
-#include "../gauges/pumpkin_gauges.h"
+
 #include "../controlers/colorpicker/src/qml/colorpickerqml.h"
 #include "../controlers/colorpicker/src/widgets/colorpicker.h"
+#include "../indicators/gauges/src/pumpkin_gauges.h"
+
+#include "../indicators/SevenSegments/src-sevensegments/sevensegmentsml.h"
 
 int main(int argc, char *argv[])
 {
@@ -51,11 +54,12 @@ int main(int argc, char *argv[])
 
 	QApplication app(argc, argv);
 
-	qmlRegisterType<Brushes>();
+	qmlRegisterAnonymousType<Brushes>("", 1);
 	qmlRegisterType<VerticalGaugeQML>("pumpkin.gauges", 1, 0, "VerticalGauge");
 	qmlRegisterType<CircularGaugeQML>("pumpkin.gauges", 1, 0, "CircularGauge");
 	qmlRegisterType<CircularGaugeQML>("pumpkin.gauges", 1, 0, "CircularGauge");
 	qmlRegisterType<ColorPickerQML>("pumpkin.controlers", 1, 0, "ColorPicker");
+	qmlRegisterType<SevenSegmentsML>("pumpkin.indicators", 1, 0, "SevenSegments");
 
 
 	Pumpkin::VerticalGauge* verticalGaugeWidget = new Pumpkin::VerticalGauge();
@@ -75,6 +79,7 @@ int main(int argc, char *argv[])
 
 
 	QWidget* gallery = new QWidget();
+	widgets->setFixedWidth(200);
 	QHBoxLayout* layout = new QHBoxLayout(gallery);
 	layout->addWidget(view);
 	layout->addWidget(widgets);

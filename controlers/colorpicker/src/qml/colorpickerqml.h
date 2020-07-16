@@ -44,10 +44,11 @@ knowledge of the CeCILL-C license and that you accept its terms.
 #include <QSequentialAnimationGroup>
 
 #include "../colorpickercommon.h"
-#include "../renderers/colorpickeranimator.h"
-#include "../renderers/colorpickerbase.h"
+#include "../common/colorpickeranimator.h"
+#include "../common/colorpickerbase.h"
 
-template<typename T> class ColorPickerRenderer;
+//template<typename T> class ColorPickerRenderer;
+class ColorPickerRenderer;
 
 class ColorPickerQML : public QQuickPaintedItem, public ColorPickerBase
 {
@@ -82,7 +83,12 @@ public:
 	}
 
 private:
-	friend class ColorPickerRenderer<ColorPickerQML>;
-};
+//	friend class ColorPickerRenderer<ColorPickerQML>;
+	friend class ColorPickerRendererBase;
 
+	// ColorPickerBase interface
+public:
+	virtual void updateArea(const QRect &are) override;
+	virtual QSizeF size() const override;
+};
 #endif // COLORPICKERQML_H

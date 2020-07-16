@@ -36,7 +36,6 @@ int main(int argc, char *argv[])
 	n->appendRows(QList<QStandardItem*>() << g << m);
 	o->appendRows(QList<QStandardItem*>() << e << f << n);
 
-	//root->appendRows(QList<QStandardItem*>() << new QStandardItem("Leaf #1") << new QStandardItem("Leaf #2"));
 	model->appendRow(o);
 
 	QQmlApplicationEngine engine;
