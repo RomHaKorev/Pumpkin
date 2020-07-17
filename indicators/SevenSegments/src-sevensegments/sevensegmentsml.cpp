@@ -548,50 +548,6 @@ void SevenSegmentsML::paint(QPainter *painter)
 	QRectF const contentRect(boundingRect().adjusted(12, 12, -12, -12));
 
 	qreal distance = animation->currentValue().toReal();
-	/*QPainterPath p;
-	switch(value)
-	{
-	case 0:
-		p = createPath(contentRect, {1, 2, 3, 4, 5, 6}, distance);
-		break;
-	case 1:
-		p = one(contentRect, distance);//createPath(contentRect, {2, 3}, distance);
-		break;
-	case 2:
-		p = two(contentRect, distance); //createPath(contentRect, {1, 2, 7, 5, 4}, distance);
-		break;
-	case 3:
-		p = createPath(contentRect, {1, 2, 3, 4, 7}, distance);
-		break;
-	case 4:
-		p = createPath(contentRect, {2, 3, 7, 6}, distance);
-		break;
-	case 5:
-		p = createPath(contentRect, {1, 6, 7, 3, 4}, distance);
-		break;
-	case 6:
-		p = createPath(contentRect, {1, 6, 5, 7, 3, 4}, distance);
-		break;
-	case 7:
-		p = createPath(contentRect, {1, 2, 3}, distance);
-		break;
-	case 8:
-		p = createPath(contentRect, {1, 2, 3, 4, 5, 6, 7}, distance);
-		break;
-	case 9:
-		p = createPath(contentRect, {1, 2, 3, 4, 6, 7}, distance);
-		break;
-	default:
-		return;
-	}
-	//QPainterPath p = createPath(contentRect, {2, 3});
-	//QPainterPath p = createPath(contentRect, {1, 2, 7, 5, 4});
-	//QPainterPath p = createPath(contentRect, {1, 2, 3, 4, 7});
-	//QPainterPath p = createPath(contentRect, {2, 3, 7, 6});
-	//QPainterPath p = createPath(contentRect, {1, 6, 7, 3, 4});
-	//QPainterPath p = createPath(contentRect, {1, 2, 3});
-	//QPainterPath p = createPath(contentRect, {1, 2, 3, 4, 5, 6, 7});
-	//QPainterPath p = createPath(contentRect, {1, 2, 3, 4, 6, 7});*/
 
 	painter->setPen(QPen(Qt::black, 16, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
 
@@ -632,17 +588,16 @@ void SevenSegmentsML::paint(QPainter *painter)
 		return;
 	}
 
+	painter->save();
+	painter->setBrush(Qt::black);
+	painter->setPen(Qt::NoPen);
 	for( auto line: p)
 	{
 		if (line.length() == 0.0)
 			continue;
-		painter->save();
-
-		painter->setBrush(Qt::black);
-		painter->setPen(Qt::NoPen);
 		painter->drawPolygon(line.shape(10));
-		painter->restore();
 	}
+	painter->restore();
 
 	//painter->drawPath(p);
 

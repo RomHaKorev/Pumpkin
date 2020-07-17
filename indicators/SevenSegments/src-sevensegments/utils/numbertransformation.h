@@ -541,6 +541,7 @@ namespace utils {
 	QVector<Segment> seven(QRectF const& rect, qreal distance);
 	QVector<Segment> eight(QRectF const& rect, qreal distance);
 	QVector<Segment> nine(QRectF const& rect, qreal distance);
+	QVector<Segment> make(QRectF const& rect, std::initializer_list<int> indexes);
 }
 }
 }

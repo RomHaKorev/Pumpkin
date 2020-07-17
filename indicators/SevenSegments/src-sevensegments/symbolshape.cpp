@@ -519,51 +519,93 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#include "symbol.h"
+#include "symbolshape.h"
 
+#include <QPainter>
 
-Symbol::Symbol(std::initializer_list<int> indexes): indexes(indexes.begin(), indexes.end())
+int findMax(std::initializer_list<QVector<SegmentShape>> lists)
+{
+	int max = 0;
+	for (auto list: lists)
+	{
+		max = std::max(std::max_element(list.begin(), list.end(),
+										[](SegmentShape const& a, SegmentShape const& b) {
+											return (a.step < b.step);
+										})->index
+				, max);
+	}
+	return max;
+}
+
+SymbolShape::SymbolShape(QVector<SegmentShape> const& fixed, QVector<SegmentShape> const& toGrow, QVector<SegmentShape> const& toShrink):
+	fixed(fixed), toGrow(toGrow), toShrink(toShrink), stepCount(findMax({fixed, toGrow, toShrink}))
 {}
 
 
-SymbolShape Symbol::to(Symbol const& other) const
+QVector<Segment> SymbolShape::createSegments(QRectF const& contentRect)
 {
-	QVector<SegmentShape> commonParts, toGrowParts, toShrinkParts;
+	QLineF left(contentRect.topLeft(), contentRect.bottomLeft());
+	QLineF right(contentRect.bottomRight(), contentRect.topRight());
+	right = QLineF(right.p2(), right.p1());
 
-	QVector<int> indexesToAdd;
-	QVector<int> indexesToRemove;
-	QVector<int> indexesToKeep;
-	for (auto index: indexes)
-	{
-		if (other.indexes.contains(index))
-			indexesToKeep << index;
-		else
-			indexesToRemove << index;
-	}
+	QLineF top(left.p1(), right.p1());
+	QLineF bottom(left.p2(), right.p2());
 
-	for (auto index: other.indexes)
-	{
-		if (!indexes.contains(index))
-			indexesToAdd << index;
-	}
+	Segment segment1(Orientation::Top, top);
+	Segment segment2(Orientation::Right | Orientation::Top, right);
+	segment2.setLength(right.length()/2);
 
-	qDebug() << "Fixed: ";
-	for(auto i: commonParts)
-	{
-		qDebug() << i.index << "/" << i.step;
-	}
-	qDebug() << "Grow: ";
-	for(auto i: indexesToAdd)
-	{
-		qDebug() << i;
-	}
-	qDebug() << "shrink: ";
-	for(auto i: indexesToRemove)
-	{
-		qDebug() << i;
-	}
+	Segment segment3(Orientation::Right | Orientation::Bottom, segment2.p2(), right.p2());
+	Segment segment4(Orientation::Bottom, bottom);
 
-	return SymbolShape(commonParts, toGrowParts, toShrinkParts);
+	Segment segment5(Orientation::Left | Orientation::Bottom, left.p2(), left.p1());
+	segment5.setLength(left.length()/2);
+	Segment segment6(Orientation::Left | Orientation::Top, segment5.p2(), left.p1());
+
+	Segment segment7(Orientation::Middle, segment2.p2(), segment5.p2());
+
+	return QVector<Segment>() << segment1
+			 << segment2
+			 << segment3
+			 << segment4
+			 << segment5
+			 << segment6
+			 << segment7;
 }
 
 
+qreal SymbolShape::boundDistanceOnSegment(int segment, qreal distance, int numberOfSegments)
+{
+	qreal const distancePerSegment = 1.0 / numberOfSegments;
+	return qMax(0.0, qMin(distancePerSegment, distance - distancePerSegment * segment) / distancePerSegment);
+}
+
+void SymbolShape::paint(QPainter& painter, QRectF const& contentRect, qreal distance)
+{
+	auto grow = [this, distance](int part) {
+		return boundDistanceOnSegment(part, distance, stepCount);
+	};
+
+	auto shrink = [this, distance](int part) {
+		return boundDistanceOnSegment(part, 1.0 - distance, stepCount);
+	};
+
+
+	auto segments = createSegments(contentRect);
+	painter.save();
+	painter.setBrush(Qt::black);
+	painter.setPen(Qt::NoPen);
+	for (auto shape: fixed)
+		painter.drawPolygon(segments.at(shape.index).shape(10));
+	for (auto shape: toGrow)
+		painter.drawPolygon(segments.at(shape.index).fromMiddle(grow(shape.step)).shape(10));
+	for (auto shape: toShrink)
+		painter.drawPolygon(segments.at(shape.index).fromMiddle(shrink(shape.step)).shape(10));
+	painter.restore();
+}
+
+QVector<int> SymbolShape::pathTo(int segment, QVector<int> fixed)
+{
+	QVector<int> path;
+	return path;
+}

@@ -47,6 +47,8 @@ knowledge of the CeCILL-C license and that you accept its terms.
 
 #include "../indicators/SevenSegments/src-sevensegments/sevensegmentsml.h"
 
+#include "../indicators/SevenSegments/src-sevensegments/symbol.h"
+
 int main(int argc, char *argv[])
 {
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -84,6 +86,11 @@ int main(int argc, char *argv[])
 	layout->addWidget(view);
 	layout->addWidget(widgets);
 	gallery->show();
+
+	Symbol s1({0, 1});
+	Symbol s2({1, 2});
+	s1.to(s2);
+	return 0;
 
 	return app.exec();
 }

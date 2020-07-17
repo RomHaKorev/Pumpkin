@@ -522,6 +522,16 @@ Version 1.0 dated 2006-09-05.
 
 #include <QDebug>
 
+QVector<Segment> Pumpkin::clock::utils::make(QRectF const& rect, std::initializer_list<int> indexes)
+{
+	auto const segments = createSegments(rect);
+
+	QVector<Segment> segmentsToDisplay;
+	for (auto i: indexes)
+		segmentsToDisplay << segments[i];
+	return segmentsToDisplay;
+}
+
 QVector<Segment> Pumpkin::clock::utils::zero(QRectF const& rect, qreal distance)
 {
 	auto bound = [distance](int part) {
@@ -538,8 +548,8 @@ QVector<Segment> Pumpkin::clock::utils::zero(QRectF const& rect, qreal distance)
 					  << segments[1]
 					  << segments[0]
 					  << segments[5]
-					  << segments[4].right(bound(0))
-					  << segments[6].right(shrink(0))
+					  << segments[4].fromEnd(bound(0))
+					  << segments[6].fromEnd(shrink(0))
 					  << segments[3];
 	return segmentsToDisplay;
 }
@@ -558,12 +568,12 @@ QVector<Segment> Pumpkin::clock::utils::one(QRectF const& rect, qreal distance)
 	auto const segments = createSegments(rect);
 
 	QVector<Segment> segmentsToDisplay;
-	segmentsToDisplay << segments[0].right(shrink(0))
-					  << segments[3].right(shrink(0))
-					  << segments[4].left(shrink(1))
+	segmentsToDisplay << segments[0].fromEnd(shrink(0))
+					  << segments[3].fromStart(shrink(0))
+					  << segments[4].fromStart(shrink(1))
 					  << segments[1]
 					  << segments[2]
-					  << segments[5].right(shrink(1));
+					  << segments[5].fromEnd(shrink(1));
 	return segmentsToDisplay;
 }
 
@@ -580,26 +590,24 @@ QVector<Segment> Pumpkin::clock::utils::two(QRectF const& rect, qreal distance)
 	auto const segments = createSegments(rect);
 
 	QVector<Segment> segmentsToDisplay;
-	segmentsToDisplay << segments[6].left(grow(0))
-					  << segments[2].left(shrink(2))
-					  << segments[4].right(grow(1))
+	segmentsToDisplay << segments[6].fromStart(grow(0))
+					  << segments[2].fromStart(shrink(2))
+					  << segments[4].fromEnd(grow(1))
 					  << segments[1]
-					  << segments[0].right(grow(0))
-					  << segments[3].left(grow(2));
+					  << segments[0].fromEnd(grow(0))
+					  << segments[3].fromEnd(grow(2));
 	return segmentsToDisplay;
 }
 
 QVector<Segment> Pumpkin::clock::utils::three(QRectF const& rect, qreal distance)
 {
 	auto bound = [distance](int part) {
-		qreal v = boundDistanceOnSegment(part, distance, 1);
-		qDebug() << "Grow  : " << v;
+		qreal v = boundDistanceOnSegment(part, distance, 2);
 		return v;
 	};
 
 	auto shrink = [distance](int part) {
-		qreal v = 1.0 - boundDistanceOnSegment(part, distance, 1);
-		qDebug() << "Shrink: " << v;
+		qreal v = 1.0 - boundDistanceOnSegment(part, distance, 2);
 		return v;
 	};
 
@@ -607,8 +615,8 @@ QVector<Segment> Pumpkin::clock::utils::three(QRectF const& rect, qreal distance
 	auto const segments = createSegments(rect);
 
 	QVector<Segment> segmentsToDisplay;
-	segmentsToDisplay << segments[2].left(bound(0))
-					  << segments[4].right(shrink(0))
+	segmentsToDisplay << segments[2].fromEnd(bound(0))
+					  << segments[4].fromStart(shrink(1))
 					  << segments[1]
 					  << segments[0]
 					  << segments[3]
@@ -621,13 +629,11 @@ QVector<Segment> Pumpkin::clock::utils::four(QRectF const& rect, qreal distance)
 {
 	auto bound = [distance](int part) {
 		qreal v = boundDistanceOnSegment(part, distance, 1);
-		qDebug() << "Grow  : " << v;
 		return v;
 	};
 
 	auto shrink = [distance](int part) {
 		qreal v = 1.0 - boundDistanceOnSegment(part, distance, 1);
-		qDebug() << "Shrink: " << v;
 		return v;
 	};
 
@@ -638,9 +644,9 @@ QVector<Segment> Pumpkin::clock::utils::four(QRectF const& rect, qreal distance)
 	segmentsToDisplay << segments[2]
 					  << segments[1]
 					  << segments[6]
-					  << segments[3].right(shrink(0))
-					  << segments[0].right(shrink(0))
-					  << segments[5].left(bound(0))
+					  << segments[3].fromStart(shrink(0))
+					  << segments[0].fromEnd(shrink(0))
+					  << segments[5].fromStart(bound(0))
 			;
 	return segmentsToDisplay;
 }
@@ -650,13 +656,11 @@ QVector<Segment> Pumpkin::clock::utils::five(QRectF const& rect, qreal distance)
 {
 	auto bound = [distance](int part) {
 		qreal v = boundDistanceOnSegment(part, distance, 1);
-		qDebug() << "Grow  : " << v;
 		return v;
 	};
 
 	auto shrink = [distance](int part) {
 		qreal v = 1.0 - boundDistanceOnSegment(part, distance, 1);
-		qDebug() << "Shrink: " << v;
 		return v;
 	};
 
@@ -665,10 +669,10 @@ QVector<Segment> Pumpkin::clock::utils::five(QRectF const& rect, qreal distance)
 
 	QVector<Segment> segmentsToDisplay;
 	segmentsToDisplay << segments[2]
-					  << segments[1].right(shrink(0))
+					  << segments[1].fromEnd(shrink(0))
 					  << segments[6]
-					  << segments[3].right(bound(0))
-					  << segments[0].left(bound(0))
+					  << segments[3].fromStart(bound(0))
+					  << segments[0].fromStart(bound(0))
 					  << segments[5]
 			;
 	return segmentsToDisplay;
@@ -678,13 +682,11 @@ QVector<Segment> Pumpkin::clock::utils::six(QRectF const& rect, qreal distance)
 {
 	auto bound = [distance](int part) {
 		qreal v = boundDistanceOnSegment(part, distance, 1);
-		qDebug() << "Grow  : " << v;
 		return v;
 	};
 
 	auto shrink = [distance](int part) {
 		qreal v = 1.0 - boundDistanceOnSegment(part, distance, 1);
-		qDebug() << "Shrink: " << v;
 		return v;
 	};
 
@@ -697,7 +699,7 @@ QVector<Segment> Pumpkin::clock::utils::six(QRectF const& rect, qreal distance)
 					  << segments[3]
 					  << segments[0]
 					  << segments[5]
-					  << segments[4].right(bound(0))
+					  << segments[4].fromEnd(bound(0))
 			;
 	return segmentsToDisplay;
 }
@@ -706,13 +708,11 @@ QVector<Segment> Pumpkin::clock::utils::seven(QRectF const& rect, qreal distance
 {
 	auto bound = [distance](int part) {
 		qreal v = boundDistanceOnSegment(part, distance, 3);
-		qDebug() << "Grow  : " << v;
 		return v;
 	};
 
 	auto shrink = [distance](int part) {
 		qreal v = 1.0 - boundDistanceOnSegment(part, distance, 3);
-		qDebug() << "Shrink: " << v;
 		return v;
 	};
 
@@ -720,12 +720,12 @@ QVector<Segment> Pumpkin::clock::utils::seven(QRectF const& rect, qreal distance
 
 	QVector<Segment> segmentsToDisplay;
 	segmentsToDisplay << segments[2]
-					  << segments[6].left(shrink(0))
-					  << segments[1].right(bound(0))
-					  << segments[3].right(shrink(2))
+					  << segments[6].fromStart(shrink(0))
+					  << segments[1].fromEnd(bound(0))
+					  << segments[3].fromStart(shrink(2))
 					  << segments[0]
-					  << segments[5].right(shrink(1))
-					  << segments[4].left(shrink(1))
+					  << segments[5].fromEnd(shrink(1))
+					  << segments[4].fromStart(shrink(1))
 			;
 	return segmentsToDisplay;
 }
@@ -734,13 +734,11 @@ QVector<Segment> Pumpkin::clock::utils::eight(QRectF const& rect, qreal distance
 {
 	auto bound = [distance](int part) {
 		qreal v = boundDistanceOnSegment(part, distance, 3);
-		qDebug() << "Grow  : " << v;
 		return v;
 	};
 
 	auto shrink = [distance](int part) {
 		qreal v = 1.0 - boundDistanceOnSegment(part, distance, 3);
-		qDebug() << "Shrink: " << v;
 		return v;
 	};
 
@@ -750,10 +748,10 @@ QVector<Segment> Pumpkin::clock::utils::eight(QRectF const& rect, qreal distance
 	segmentsToDisplay << segments[2]
 					  << segments[1]
 					  << segments[0]
-					  << segments[5].right(bound(0))
-					  << segments[4].right(bound(1))
-					  << segments[6].right(bound(1))
-					  << segments[3].left(bound(2))
+					  << segments[5].fromEnd(bound(0))
+					  << segments[4].fromEnd(bound(1))
+					  << segments[6].fromEnd(bound(1))
+					  << segments[3].fromEnd(bound(2))
 
 			;
 	return segmentsToDisplay;
@@ -778,7 +776,7 @@ QVector<Segment> Pumpkin::clock::utils::nine(QRectF const& rect, qreal distance)
 					  << segments[1]
 					  << segments[0]
 					  << segments[5]
-					  << segments[4].right(shrink(0))
+					  << segments[4].fromEnd(shrink(0))
 					  << segments[6]
 					  << segments[3]
 

@@ -10,7 +10,8 @@ HEADERS += \
     utils/numbertransformation.h \
     utils/sevensegmentsutils.h \
     segment.h \
-    symbol.h
+    symbol.h \
+    symbolshape.h
 
 SOURCES += \
     sevensegmentsml.cpp \
@@ -18,5 +19,6 @@ SOURCES += \
     utils/numbertransformation.cpp \
     utils/sevensegmentsutils.cpp \
     segment.cpp \
-    symbol.cpp
+    symbol.cpp \
+    symbolshape.cpp
 

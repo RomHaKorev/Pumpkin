@@ -527,19 +527,19 @@ Segment::Segment(Orientations orientation, QPointF const& p1, QPointF const& p2)
 Segment::Segment(Orientations orientation, QLineF const& line): Segment(orientation, line.p1(), line.p2())
 {}
 
-Segment Segment::right(qreal distance) const
+Segment Segment::fromEnd(qreal distance) const
 {
 	return Segment(orientation, pointAt(1.0 - distance),
 				   pointAt(1.0));
 }
 
-Segment Segment::left(qreal distance) const
+Segment Segment::fromStart(qreal distance) const
 {
 	return Segment(orientation, pointAt(0.0),
 				   pointAt(distance));
 }
 
-Segment Segment::middle(qreal distance) const
+Segment Segment::fromMiddle(qreal distance) const
 {
 	return Segment(orientation, pointAt(0.5 - 0.5 * distance),
 				   pointAt(0.5 + 0.5 * distance));
@@ -559,10 +559,10 @@ QPolygonF Segment::shape(qreal thickness) const
 		p.push_back(p1() + QPointF(offset, offset));
 		break;
 	case Orientation::Bottom:
-		p.push_back(p1() + QPointF(-offset, offset));
-		p.push_back(p2() + QPointF(offset, offset));
-		p.push_back(p2() + QPointF(-offset, -offset));
-		p.push_back(p1() + QPointF(offset, -offset));
+		p.push_back(p2() + QPointF(-offset, offset));
+		p.push_back(p1() + QPointF(offset, offset));
+		p.push_back(p1() + QPointF(-offset, -offset));
+		p.push_back(p2() + QPointF(offset, -offset));
 		break;
 	case Orientation::Middle:
 		p.push_back(p2() + QPointF(-offset, 0));

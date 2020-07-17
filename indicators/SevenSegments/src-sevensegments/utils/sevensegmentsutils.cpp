@@ -530,7 +530,7 @@ QVector<Segment> createSegments(QRectF const& contentRect)
 	right = QLineF(right.p2(), right.p1());
 
 	QLineF top(left.p1(), right.p1());
-	QLineF bottom(left.p2(), right.p2());
+	QLineF bottom(right.p2(), left.p2());
 
 	Segment segment1(Orientation::Top, top);
 	Segment segment2(Orientation::Right | Orientation::Top, right);

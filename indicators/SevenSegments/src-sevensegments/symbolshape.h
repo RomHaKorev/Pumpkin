@@ -519,51 +519,39 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#include "symbol.h"
+#ifndef SYMBOLSHAPE_H
+#define SYMBOLSHAPE_H
 
+#include <QVector>
 
-Symbol::Symbol(std::initializer_list<int> indexes): indexes(indexes.begin(), indexes.end())
-{}
+#include "segment.h"
 
+class QPainter;
 
-SymbolShape Symbol::to(Symbol const& other) const
+struct SegmentShape
 {
-	QVector<SegmentShape> commonParts, toGrowParts, toShrinkParts;
 
-	QVector<int> indexesToAdd;
-	QVector<int> indexesToRemove;
-	QVector<int> indexesToKeep;
-	for (auto index: indexes)
-	{
-		if (other.indexes.contains(index))
-			indexesToKeep << index;
-		else
-			indexesToRemove << index;
-	}
+	SegmentShape(int index, int step): index(index), step(step)
+	{}
+	int index;
+	int step;
+};
 
-	for (auto index: other.indexes)
-	{
-		if (!indexes.contains(index))
-			indexesToAdd << index;
-	}
+class SymbolShape
+{
+public:
+	SymbolShape(QVector<SegmentShape> const& fixed, QVector<SegmentShape> const& toGrow, QVector<SegmentShape> const& toShrink);
 
-	qDebug() << "Fixed: ";
-	for(auto i: commonParts)
-	{
-		qDebug() << i.index << "/" << i.step;
-	}
-	qDebug() << "Grow: ";
-	for(auto i: indexesToAdd)
-	{
-		qDebug() << i;
-	}
-	qDebug() << "shrink: ";
-	for(auto i: indexesToRemove)
-	{
-		qDebug() << i;
-	}
+	void paint(QPainter& painter, QRectF const& contentRect, qreal distance);
+private:
+	static QVector<Segment> createSegments(QRectF const& contentRect);
+	static qreal boundDistanceOnSegment(int segment, qreal distance, int numberOfSegments);
+	static QVector<int> pathTo(int segment, QVector<int> fiexed);
 
-	return SymbolShape(commonParts, toGrowParts, toShrinkParts);
-}
+	QVector<SegmentShape> const& fixed;
+	QVector<SegmentShape> const& toGrow;
+	QVector<SegmentShape> const& toShrink;
+	int stepCount;
+};
 
-
+#endif // SYMBOLSHAPE_H

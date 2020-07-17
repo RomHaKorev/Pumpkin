@@ -523,19 +523,21 @@ Version 1.0 dated 2006-09-05.
 #define SYMBOL_H
 
 #include <QVector>
+#include <QPainter>
+#include <QDebug>
 
 #include "segment.h"
-
+#include "symbolshape.h"
 
 class Symbol
 {
 public:
 	Symbol(std::initializer_list<int> segments);
-	QVector<Segment> segments(QRectF const& contentRect) const;
+
+	SymbolShape to(Symbol const& other) const;
+
 private:
 	QVector<int> indexes;
-
-	static QVector<Segment> createSegments(QRectF const& contentRect);
 };
 
 #endif // SYMBOL_H

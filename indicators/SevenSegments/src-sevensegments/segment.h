@@ -541,9 +541,9 @@ class Segment: public QLineF
 public:
 	Segment(Orientations orientation, QPointF const& p1, QPointF const& p2);
 	Segment(Orientations orientation, QLineF const& line);
-	Segment right(qreal distance) const;
-	Segment left(qreal distance) const;
-	Segment middle(qreal distance) const;
+	Segment fromEnd(qreal distance) const;
+	Segment fromStart(qreal distance) const;
+	Segment fromMiddle(qreal distance) const;
 
 	QPolygonF shape(qreal thickness) const;
 private:
