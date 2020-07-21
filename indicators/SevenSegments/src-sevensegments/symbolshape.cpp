@@ -522,8 +522,9 @@ Version 1.0 dated 2006-09-05.
 #include "symbolshape.h"
 
 #include <QPainter>
+#include <QDebug>
 
-int findMax(std::initializer_list<QVector<SegmentShape>> lists)
+int findMaxStep(std::initializer_list<QVector<SegmentShape>> lists)
 {
 	int max = 0;
 	for (auto list: lists)
@@ -531,15 +532,17 @@ int findMax(std::initializer_list<QVector<SegmentShape>> lists)
 		max = std::max(std::max_element(list.begin(), list.end(),
 										[](SegmentShape const& a, SegmentShape const& b) {
 											return (a.step < b.step);
-										})->index
+										})->step
 				, max);
 	}
 	return max;
 }
 
 SymbolShape::SymbolShape(QVector<SegmentShape> const& fixed, QVector<SegmentShape> const& toGrow, QVector<SegmentShape> const& toShrink):
-	fixed(fixed), toGrow(toGrow), toShrink(toShrink), stepCount(findMax({fixed, toGrow, toShrink}))
-{}
+	fixed(fixed), toGrow(toGrow), toShrink(toShrink), stepCount(1 + findMaxStep({fixed, toGrow, toShrink}))
+{
+	qDebug() << "Nb of steps:" << stepCount;
+}
 
 
 QVector<Segment> SymbolShape::createSegments(QRectF const& contentRect)
@@ -576,6 +579,8 @@ QVector<Segment> SymbolShape::createSegments(QRectF const& contentRect)
 
 qreal SymbolShape::boundDistanceOnSegment(int segment, qreal distance, int numberOfSegments)
 {
+
+
 	qreal const distancePerSegment = 1.0 / numberOfSegments;
 	return qMax(0.0, qMin(distancePerSegment, distance - distancePerSegment * segment) / distancePerSegment);
 }
@@ -587,25 +592,27 @@ void SymbolShape::paint(QPainter& painter, QRectF const& contentRect, qreal dist
 	};
 
 	auto shrink = [this, distance](int part) {
-		return boundDistanceOnSegment(part, 1.0 - distance, stepCount);
+		return boundDistanceOnSegment(stepCount - part, 1.0 - distance, stepCount);
 	};
 
-
 	auto segments = createSegments(contentRect);
-	painter.save();
-	painter.setBrush(Qt::black);
-	painter.setPen(Qt::NoPen);
 	for (auto shape: fixed)
 		painter.drawPolygon(segments.at(shape.index).shape(10));
 	for (auto shape: toGrow)
-		painter.drawPolygon(segments.at(shape.index).fromMiddle(grow(shape.step)).shape(10));
+	{
+		if (shape.actionThrough == -1)
+			painter.drawPolygon(segments.at(shape.index).fromMiddle(grow(shape.step)).shape(10));
+		if (shape.actionThroughConnectedByStartPoint())
+			painter.drawPolygon(segments.at(shape.index).fromStart(grow(shape.step)).shape(10));
+		else
+			painter.drawPolygon(segments.at(shape.index).fromEnd(grow(shape.step)).shape(10));
+	}
 	for (auto shape: toShrink)
-		painter.drawPolygon(segments.at(shape.index).fromMiddle(shrink(shape.step)).shape(10));
-	painter.restore();
+	{
+		if (shape.actionThroughConnectedByStartPoint())
+			painter.drawPolygon(segments.at(shape.index).fromStart(shrink(shape.step)).shape(10));
+		else
+			painter.drawPolygon(segments.at(shape.index).fromEnd(shrink(shape.step)).shape(10));
+	}
 }
 
-QVector<int> SymbolShape::pathTo(int segment, QVector<int> fixed)
-{
-	QVector<int> path;
-	return path;
-}

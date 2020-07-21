@@ -524,33 +524,68 @@ Version 1.0 dated 2006-09-05.
 
 #include <QVector>
 
+#include <QDebug>
+
 #include "segment.h"
 
 class QPainter;
 
+enum Action {
+	Keep,
+	Add,
+	Remove
+};
+
 struct SegmentShape
 {
 
-	SegmentShape(int index, int step): index(index), step(step)
+	SegmentShape(int index, int step, Action action, int actionThrough=-1): index(index), step(step), action(action), actionThrough(actionThrough)
 	{}
 	int index;
 	int step;
+	Action action;
+	int actionThrough;
+
+	bool actionThroughConnectedByStartPoint()
+	{
+		//qDebug() << Q_FUNC_INFO << index << actionThrough;
+		Segments segments;
+		switch(index)
+		{
+		case 0:
+			return actionThrough == 6;
+		case 6:
+			return actionThrough == 1  || actionThrough == 2;
+		case 1:
+			return actionThrough == 0;
+		case 2:
+			return actionThrough == 1 || actionThrough == 6;
+		case 3:
+			return actionThrough == 4;
+		case 4:
+			return actionThrough == 3;
+		case 5:
+			return actionThrough == 4 || actionThrough == 6;
+		default:
+			return false;
+		}
+	}
 };
 
 class SymbolShape
 {
 public:
 	SymbolShape(QVector<SegmentShape> const& fixed, QVector<SegmentShape> const& toGrow, QVector<SegmentShape> const& toShrink);
+	SymbolShape() = default;
 
 	void paint(QPainter& painter, QRectF const& contentRect, qreal distance);
 private:
 	static QVector<Segment> createSegments(QRectF const& contentRect);
 	static qreal boundDistanceOnSegment(int segment, qreal distance, int numberOfSegments);
-	static QVector<int> pathTo(int segment, QVector<int> fiexed);
 
-	QVector<SegmentShape> const& fixed;
-	QVector<SegmentShape> const& toGrow;
-	QVector<SegmentShape> const& toShrink;
+	QVector<SegmentShape> fixed;
+	QVector<SegmentShape> toGrow;
+	QVector<SegmentShape> toShrink;
 	int stepCount;
 };
 

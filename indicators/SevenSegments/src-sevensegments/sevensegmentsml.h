@@ -524,12 +524,16 @@ Version 1.0 dated 2006-09-05.
 
 #include <QQuickPaintedItem>
 
+#include "symbolshape.h"
+#include "symbol.h"
+
 class QVariantAnimation;
 
 class SevenSegmentsML : public QQuickPaintedItem
 {
 	Q_OBJECT
 	Q_PROPERTY(unsigned int value READ getValue WRITE setValue NOTIFY valueChanged)
+	Q_PROPERTY(QColor color READ getColor WRITE setColor)
 public:
 	SevenSegmentsML();
 	~SevenSegmentsML() override;
@@ -539,11 +543,17 @@ public:
 	Q_INVOKABLE unsigned int getValue() const;
 	Q_INVOKABLE void setValue(unsigned int value);
 
+	Q_INVOKABLE QColor getColor() const;
+	Q_INVOKABLE void setColor(QColor const& value);
+
 signals:
 	void valueChanged(unsigned int);
 private:
 	unsigned int value;
+	SymbolShape shape;
+	Symbol currentSymbol;
 	QVariantAnimation* animation;
+	QColor color;
 };
 
 

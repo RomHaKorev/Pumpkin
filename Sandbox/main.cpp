@@ -3,10 +3,23 @@
 #include <QStandardItemModel>
 #include <QQmlContext>
 
+#include <algorithm>
+
 #include "verticaltreelayout.h"
+
+#include "../indicators/SevenSegments/src-sevensegments/symbol.h"
 
 int main(int argc, char *argv[])
 {
+	Symbol s1({1, 2});
+	Symbol s2({0, 1, 6, 4, 3});
+	Symbol s3({0, 1, 6, 2, 3});
+
+	Symbol s8({0, 1, 2, 3, 4, 5, 6});
+
+	s8.to(s1);
+
+	return 0;
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
 	QGuiApplication app(argc, argv);

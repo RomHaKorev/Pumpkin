@@ -517,88 +517,30 @@ jurisdiction, by the more diligent Party.
 Version 1.0 dated 2006-09-05.
 */
 
-#include <QDebug>
 
-#include "segmentsdrawer.h"
-#include "sevensegmentsutils.h"
 
-QPainterPath createPath(QRectF const& contentRect, std::initializer_list<int> indexes, qreal distance)
-{
+#ifndef VALUETOSEGMENT_H
+#define VALUETOSEGMENT_H
 
-	auto const segments = createSegments(contentRect);
-	QPainterPath path;
-	for (auto index: indexes)
-	{
-		index = index - 1;
-		if (index > segments.size())
-		{
-			qWarning() << index << "is an invalid segment (should be between 1 and 7)";
-			return QPainterPath();
-		}
-		auto segment = segments.at(index);
-		segment.setLength(segment.length() * distance);
-		path.moveTo(segment.p1());
-		path.lineTo(segment.p2());
-	}
-	return path;
+#include <QVector>
+
+#include "segment.h"
+
+namespace Pumpkin {
+namespace symbol_p {
+Segments const zero( {0, 1, 2, 3, 4, 5});
+Segments const one({1, 2});
+Segments const two({0, 1, 4, 3, 6});
+Segments const three({0, 1, 2, 3, 6});
+Segments const four({1, 2, 5, 6});
+Segments const five({0, 2, 3, 5, 6});
+Segments const six({0, 2, 3, 4, 5, 6});
+Segments const seven({0, 1, 2});
+Segments const eight({0, 1, 2, 3, 4, 5, 6});
+Segments const nine({0, 1, 2, 3, 5, 6});
+
+Segments symbolOf(unsigned int value);
+}
 }
 
-
-
-QVector<QLineF> zero(QRectF const& rect, qreal distance)
-{
-	auto bound = [distance](int part) {
-		return boundDistanceOnSegment(part, distance, 3);
-	};
-
-	auto const segments = createSegments(rect);
-
-	QVector<QLineF> segmentsToDisplay;
-	segmentsToDisplay << reduceByRight(segments[0], bound(0))
-					  << reduceByLeft(segments[3], bound(0))
-					  << reduceByRight(segments[4], bound(1))
-					  << reduceByRight(segments[1], bound(1))
-					  << reduceByRight(segments[2], bound(2))
-					  << reduceByRight(segments[5], bound(2));
-	return segmentsToDisplay;
-}
-
-QVector<QLineF> one(QRectF const& rect, qreal distance)
-{
-	QLineF line(rect.topRight(), rect.bottomRight());
-	return QVector<QLineF>() << QLineF(line.pointAt(0.5 - 0.5 * distance ), line.pointAt(0.5 + 0.5 * distance ));
-}
-
-QVector<QLineF> two(QRectF const& rect, qreal distance)
-{
-	auto bound = [distance](int part) {
-		return boundDistanceOnSegment(part, distance, 3);
-	};
-
-	auto const segments = createSegments(rect);
-
-	QVector<QLineF> segmentsToDisplay;
-	segmentsToDisplay << reduceByMiddle(segments[6], bound(0))
-					  << reduceByLeft(segments[4], bound(1))
-					  << reduceByLeft(segments[1], bound(1))
-					  << reduceByLeft(segments[0], bound(2))
-					  << reduceByRight(segments[3], bound(2));
-	return segmentsToDisplay;
-}
-
-QVector<QLineF> three(QRectF const& rect, qreal distance)
-{
-	auto bound = [distance](int part) {
-		return boundDistanceOnSegment(part, distance, 3);
-	};
-
-	auto const segments = createSegments(rect);
-
-	QVector<QLineF> segmentsToDisplay;
-	segmentsToDisplay << reduceByRight(segments[2], bound(0))
-					  << reduceByLeft(segments[1], bound(0))
-					  << reduceByLeft(segments[0], bound(1))
-					  << reduceByLeft(segments[3], bound(1))
-					  << reduceByRight(segments[6], bound(2));
-	return segmentsToDisplay;
-}
+#endif // VALUETOSEGMENT_H

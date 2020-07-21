@@ -6,19 +6,17 @@ TARGET = PumpkinSevenSegments
 
 HEADERS += \
     sevensegmentsml.h \
-    utils/segmentsdrawer.h \
-    utils/numbertransformation.h \
     utils/sevensegmentsutils.h \
     segment.h \
     symbol.h \
-    symbolshape.h
+    symbolshape.h \
+    utils/symbol_p.h
 
 SOURCES += \
     sevensegmentsml.cpp \
-    utils/segmentsdrawer.cpp \
-    utils/numbertransformation.cpp \
     utils/sevensegmentsutils.cpp \
     segment.cpp \
     symbol.cpp \
-    symbolshape.cpp
+    symbolshape.cpp \
+    utils/symbol_p.cpp
 

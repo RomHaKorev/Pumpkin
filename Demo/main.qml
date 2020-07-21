@@ -32,7 +32,9 @@ Item {
                     id: picker
                     width: 200
                     height: 200
-                    onColorChanged: color.text = picker.color
+                    onColorChanged: {
+                        color.text = picker.color
+                    }
                 }
             }
 
@@ -65,21 +67,22 @@ Item {
             Repeater {
                 id: segments
                 property int offset: 0
-                model: 10
+                model: 1
                 SevenSegments {
-                    value: (index + segments.offset) % 10
+                    value: foo.value % 10//(index + segments.offset) % 10
                     width: 70
                     height: 120
+                    color: picker.color
                 }
             }
         }
 
-        Timer {
-                interval: 1200;
+        /* Timer {
+                interval: 3000;
                 running: true;
                 repeat: true
                 onTriggered: segments.offset = (segments.offset + 1) % 10;
-            }
+            } */
 
         /*CollapsibleGroupBox {
             title: qsTr("Synchronize")

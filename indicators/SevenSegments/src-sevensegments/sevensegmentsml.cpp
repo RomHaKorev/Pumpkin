@@ -525,9 +525,9 @@ Version 1.0 dated 2006-09-05.
 #include <QPainterPath>
 #include <QVariantAnimation>
 
-#include "utils/numbertransformation.h"
+#include "utils/symbol_p.h"
 
-SevenSegmentsML::SevenSegmentsML(): QQuickPaintedItem(), animation(new QVariantAnimation(this))
+SevenSegmentsML::SevenSegmentsML(): QQuickPaintedItem(), value(INT_MAX), animation(new QVariantAnimation(this)), color(Qt::black)
 {
 	animation->setDuration(1000);
 	animation->setStartValue(0.0);
@@ -549,57 +549,9 @@ void SevenSegmentsML::paint(QPainter *painter)
 
 	qreal distance = animation->currentValue().toReal();
 
-	painter->setPen(QPen(Qt::black, 16, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
-
-	QVector<Segment> p;
-	switch(value)
-	{
-	case 0:
-		p = Pumpkin::clock::utils::zero(contentRect, distance);
-		break;
-	case 1:
-		p = Pumpkin::clock::utils::one(contentRect, distance);
-		break;
-	case 2:
-		p = Pumpkin::clock::utils::two(contentRect, distance);
-		break;
-	case 3:
-		p = Pumpkin::clock::utils::three(contentRect, distance);
-		break;
-	case 4:
-		p = Pumpkin::clock::utils::four(contentRect, distance);
-		break;
-	case 5:
-		p = Pumpkin::clock::utils::five(contentRect, distance);
-		break;
-	case 6:
-		p = Pumpkin::clock::utils::six(contentRect, distance);
-		break;
-	case 7:
-		p = Pumpkin::clock::utils::seven(contentRect, distance);
-		break;
-	case 8:
-		p = Pumpkin::clock::utils::eight(contentRect, distance);
-		break;
-	case 9:
-		p = Pumpkin::clock::utils::nine(contentRect, distance);
-		break;
-	default:
-		return;
-	}
-
-	painter->save();
-	painter->setBrush(Qt::black);
-	painter->setPen(Qt::NoPen);
-	for( auto line: p)
-	{
-		if (line.length() == 0.0)
-			continue;
-		painter->drawPolygon(line.shape(10));
-	}
-	painter->restore();
-
-	//painter->drawPath(p);
+	painter->setBrush(color);
+	painter->setPen(color);
+	shape.paint(*painter, contentRect, distance);
 
 }
 
@@ -616,9 +568,29 @@ void SevenSegmentsML::setValue(unsigned int value)
 		this->value = 0;
 		return;
 	}
+	if (value == this->value)
+		return;
+
 	this->value = value;
+
 	emit valueChanged(value);
+
+	auto newSymbol = Pumpkin::symbol_p::symbolOf(value);
+	this->shape = currentSymbol.to(newSymbol);
+	this->currentSymbol = newSymbol;
 	this->animation->stop();
 	this->animation->setCurrentTime(0);
 	this->animation->start();
+}
+
+QColor SevenSegmentsML::getColor() const
+{
+	return color;
+}
+
+void SevenSegmentsML::setColor(QColor const& value)
+{
+	qDebug() << Q_FUNC_INFO;
+	color = value;
+	this->update();
 }

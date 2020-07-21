@@ -55,7 +55,7 @@ void ColorPickerQML::paint(QPainter* p)
 
 void ColorPickerQML::validate()
 {
-	colorChanged(color());
+	emit colorChanged(color());
 }
 
 void ColorPickerQML::updateArea(const QRect &area)

@@ -525,6 +525,8 @@ Version 1.0 dated 2006-09-05.
 #include <QLineF>
 #include <QPolygonF>
 
+typedef QVector<int> Segments;
+
 enum Orientation {
 	Top = 1,
 	Bottom = 2,

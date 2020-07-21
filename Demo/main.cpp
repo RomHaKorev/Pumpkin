@@ -87,10 +87,5 @@ int main(int argc, char *argv[])
 	layout->addWidget(widgets);
 	gallery->show();
 
-	Symbol s1({0, 1});
-	Symbol s2({1, 2});
-	s1.to(s2);
-	return 0;
-
 	return app.exec();
 }

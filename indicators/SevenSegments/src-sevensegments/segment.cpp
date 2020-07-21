@@ -517,9 +517,9 @@ jurisdiction, by the more diligent Party.
 Version 1.0 dated 2006-09-05.
 */
 
-
-
 #include "segment.h"
+
+#include <QDebug>
 
 Segment::Segment(Orientations orientation, QPointF const& p1, QPointF const& p2): QLineF(p1, p2), orientation(orientation)
 {}
@@ -559,10 +559,10 @@ QPolygonF Segment::shape(qreal thickness) const
 		p.push_back(p1() + QPointF(offset, offset));
 		break;
 	case Orientation::Bottom:
-		p.push_back(p2() + QPointF(-offset, offset));
-		p.push_back(p1() + QPointF(offset, offset));
-		p.push_back(p1() + QPointF(-offset, -offset));
-		p.push_back(p2() + QPointF(offset, -offset));
+		p.push_back(p1() + QPointF(-offset, offset));
+		p.push_back(p2() + QPointF(offset, offset));
+		p.push_back(p2() + QPointF(-offset, -offset));
+		p.push_back(p1() + QPointF(offset, -offset));
 		break;
 	case Orientation::Middle:
 		p.push_back(p2() + QPointF(-offset, 0));
@@ -597,6 +597,7 @@ QPolygonF Segment::shape(qreal thickness) const
 		p.push_back(p2() + QPointF(offset, offset));
 		break;
 	}
+
 
 	return p;
 }

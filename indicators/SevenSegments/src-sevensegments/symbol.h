@@ -532,12 +532,18 @@ Version 1.0 dated 2006-09-05.
 class Symbol
 {
 public:
-	Symbol(std::initializer_list<int> segments);
+	Symbol(Segments const& segments);
+	Symbol() = default;
 
 	SymbolShape to(Symbol const& other) const;
 
+	QVector<int>::const_iterator begin() const { return indexes.begin(); }
+	QVector<int>::const_iterator end() const { return indexes.end(); }
+
+	bool contains(int segment) const;
+
 private:
-	QVector<int> indexes;
+	Segments indexes;
 };
 
 #endif // SYMBOL_H

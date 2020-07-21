@@ -30,7 +30,7 @@ private: \
 	void init() { cursorPosition = QPointF(60, 20); }*/
 
 #define COLORPICKER_INTERFACE \
-	Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorEdited) \
+	Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged) \
 	Q_PROPERTY(int brightness READ brightness WRITE setBrightness) \
 public: \
 	Q_SLOT virtual void setColor(QColor const& newValue) override \
@@ -45,8 +45,7 @@ public: \
 	    emit colorChanged(color());  \
 	    update(); \
 	} \
-	Q_SIGNAL void colorChanged(QColor const& newValue); \
-	Q_SIGNAL void colorEdited(QColor const& newValue);
+	Q_SIGNAL void colorChanged(QColor const& newValue);
 
 
 #endif // GAUGEINTERFACE_H
