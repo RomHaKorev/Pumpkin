@@ -542,7 +542,7 @@ SevenSegmentsML::~SevenSegmentsML()
 }
 
 
-void SevenSegmentsML::paint(QPainter *painter)
+void SevenSegmentsML::paint(QPainter* painter)
 {
 	painter->setRenderHint(QPainter::Antialiasing);
 	QRectF const contentRect(boundingRect().adjusted(12, 12, -12, -12));
@@ -590,7 +590,6 @@ QColor SevenSegmentsML::getColor() const
 
 void SevenSegmentsML::setColor(QColor const& value)
 {
-	qDebug() << Q_FUNC_INFO;
 	color = value;
 	this->update();
 }

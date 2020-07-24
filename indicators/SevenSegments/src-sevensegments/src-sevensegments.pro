@@ -10,7 +10,8 @@ HEADERS += \
     segment.h \
     symbol.h \
     symbolshape.h \
-    utils/symbol_p.h
+    utils/symbol_p.h \
+    segmentshape.h
 
 SOURCES += \
     sevensegmentsml.cpp \
@@ -18,5 +19,6 @@ SOURCES += \
     segment.cpp \
     symbol.cpp \
     symbolshape.cpp \
-    utils/symbol_p.cpp
+    utils/symbol_p.cpp \
+    segmentshape.cpp
 

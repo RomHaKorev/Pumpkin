@@ -519,33 +519,70 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#ifndef SYMBOLSHAPE_H
-#define SYMBOLSHAPE_H
+#ifndef AUTOREGISTER_H
+#define AUTOREGISTER_H
 
-#include <QVector>
+#include <vector>
+#include <iostream>
 
-#include <QDebug>
-
-#include "segmentshape.h"
-
-class QPainter;
+#include "testsuite.h"
 
 
-class SymbolShape
+namespace PumpkinTest {
+
+namespace details {
+class AutoRegisteredTestFactory
 {
 public:
-	SymbolShape(QVector<SegmentShape> const& fixed, QVector<SegmentShape> const& toGrow, QVector<SegmentShape> const& toShrink);
-	SymbolShape() = default;
+	AutoRegisteredTestFactory(){}
+};
+}
 
-	void paint(QPainter& painter, QRectF const& contentRect, qreal distance);
-private:
-	static QVector<Segment> createSegments(QRectF const& contentRect);
-	static qreal boundDistanceOnSegment(int segment, qreal distance, int numberOfSegments);
-
-	QVector<SegmentShape> fixed;
-	QVector<SegmentShape> toGrow;
-	QVector<SegmentShape> toShrink;
-	int stepCount;
+class AutoRegisteredTest: public PumpkinTest::details::TestSuite
+{
+public:
+	AutoRegisteredTest(std::string const& name): PumpkinTest::details::TestSuite(name)
+	{}
 };
 
-#endif // SYMBOLSHAPE_H
+class AutoRegisteredTests
+{
+public:
+	AutoRegisteredTests()
+	{}
+
+	virtual ~AutoRegisteredTests() = 0;
+private:
+	static std::vector<std::shared_ptr<AutoRegisteredTest>>& factories()
+	{
+		static std::vector<std::shared_ptr<AutoRegisteredTest>> f = std::vector<std::shared_ptr<AutoRegisteredTest>>();
+		return f;
+	}
+	template<typename T> friend class AutoRegistration;
+	friend int runAll();
+};
+
+template<typename T> class AutoRegistration: public details::AutoRegisteredTestFactory
+{
+public:
+	AutoRegistration()
+	{
+		AutoRegisteredTests::factories().push_back(std::shared_ptr<T>(new T()));
+	}
+};
+
+inline int runAll()
+{
+	for (auto test : AutoRegisteredTests::factories())
+		test->run();
+	for (auto test : AutoRegisteredTests::factories())
+		std::cout << *test;
+	return 0;
+}
+
+}
+
+
+#define REGISTER_TEST(T) static const PumpkinTest::AutoRegistration<T> T ## Inst = PumpkinTest::AutoRegistration<T>();
+
+#endif // AUTOREGISTER_H

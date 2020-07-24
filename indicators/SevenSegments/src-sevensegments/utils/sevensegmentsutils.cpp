@@ -523,10 +523,8 @@ Version 1.0 dated 2006-09-05.
 
 QVector<Segment> createSegments(QRectF const& contentRect)
 {
-	QLineF left(contentRect.topLeft() /*+ QPointF(contentRect.width() / 5, 0)*/, contentRect.bottomLeft());
-	//left.setLength(left.length() * 0.95);
-	QLineF right(contentRect.bottomRight() /*+ QPointF(-contentRect.width() / 5, 0)*/, contentRect.topRight());
-	//right.setLength(right.length() * 0.98);
+	QLineF left(contentRect.topLeft(), contentRect.bottomLeft());
+	QLineF right(contentRect.bottomRight(), contentRect.topRight());
 	right = QLineF(right.p2(), right.p1());
 
 	QLineF top(left.p1(), right.p1());

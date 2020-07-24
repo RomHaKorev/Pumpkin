@@ -519,33 +519,31 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#ifndef SYMBOLSHAPE_H
-#define SYMBOLSHAPE_H
+#ifndef EXCEPTIONS_H
+#define EXCEPTIONS_H
 
-#include <QVector>
-
-#include <QDebug>
-
-#include "segmentshape.h"
-
-class QPainter;
+#include <sstream>
+#include <exception>
 
 
-class SymbolShape
-{
+namespace PumpkinTest {
+namespace exceptions {
+
+template<typename T> class NotEqualsException: public std::exception {
 public:
-	SymbolShape(QVector<SegmentShape> const& fixed, QVector<SegmentShape> const& toGrow, QVector<SegmentShape> const& toShrink);
-	SymbolShape() = default;
-
-	void paint(QPainter& painter, QRectF const& contentRect, qreal distance);
+	NotEqualsException(T expected, T result)
+	{
+		std::stringstream ss;
+		ss << "Expected was '" << expected << "' but actual is '" << result << "'";
+		message = ss.str();
+	}
+	virtual const char * what () const noexcept { return message.c_str(); }
 private:
-	static QVector<Segment> createSegments(QRectF const& contentRect);
-	static qreal boundDistanceOnSegment(int segment, qreal distance, int numberOfSegments);
-
-	QVector<SegmentShape> fixed;
-	QVector<SegmentShape> toGrow;
-	QVector<SegmentShape> toShrink;
-	int stepCount;
+	std::string message;
 };
 
-#endif // SYMBOLSHAPE_H
+}
+
+}
+
+#endif // EXCEPTIONS_H

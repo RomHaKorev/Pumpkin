@@ -519,33 +519,42 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#ifndef SYMBOLSHAPE_H
-#define SYMBOLSHAPE_H
+#include <iostream>
 
-#include <QVector>
+#include "pumpkintest.h"
 
-#include <QDebug>
-
-#include "segmentshape.h"
-
-class QPainter;
+#include <vector>
+#include <functional>
 
 
-class SymbolShape
+class Foo: public PumpkinTest::AutoRegisteredTest
 {
 public:
-	SymbolShape(QVector<SegmentShape> const& fixed, QVector<SegmentShape> const& toGrow, QVector<SegmentShape> const& toShrink);
-	SymbolShape() = default;
-
-	void paint(QPainter& painter, QRectF const& contentRect, qreal distance);
-private:
-	static QVector<Segment> createSegments(QRectF const& contentRect);
-	static qreal boundDistanceOnSegment(int segment, qreal distance, int numberOfSegments);
-
-	QVector<SegmentShape> fixed;
-	QVector<SegmentShape> toGrow;
-	QVector<SegmentShape> toShrink;
-	int stepCount;
+	Foo() { std::cout << "In Foo" << std::endl; }
+	virtual ~Foo(){}
+	void doWork()
+	{
+		std::cout << "Foo is working" << std::endl;
+	}
 };
 
-#endif // SYMBOLSHAPE_H
+class Bar: public PumpkinTest::AutoRegisteredTest
+{
+public:
+	Bar() { std::cout << "In Bar" << std::endl; }
+	virtual ~Bar(){}
+	void doWork()
+	{
+		std::cout << "Bar is working" << std::endl;
+	}
+};
+
+REGISTER_TEST(Foo);
+REGISTER_TEST(Bar);
+
+int main()
+{
+	/*for( auto i: AutoRegisteredTests::factories)
+		i->doWork();*/
+	return PumpkinTest::runAll();
+}

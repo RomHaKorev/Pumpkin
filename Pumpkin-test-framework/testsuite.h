@@ -519,33 +519,135 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#ifndef SYMBOLSHAPE_H
-#define SYMBOLSHAPE_H
+#ifndef TESTSUITE_H
+#define TESTSUITE_H
 
-#include <QVector>
+#include <string>
+#include <list>
+#include <functional>
+#include <sstream>
+#include <iostream>
+#include <math.h>
 
-#include <QDebug>
+namespace PumpkinTest {
+namespace details {
 
-#include "segmentshape.h"
+class TestSuite;
 
-class QPainter;
-
-
-class SymbolShape
-{
+/*class TestResult {
 public:
-	SymbolShape(QVector<SegmentShape> const& fixed, QVector<SegmentShape> const& toGrow, QVector<SegmentShape> const& toShrink);
-	SymbolShape() = default;
-
-	void paint(QPainter& painter, QRectF const& contentRect, qreal distance);
+	TestResult(std::string const & name, bool result, std::string const& info= ""): name(name),
+		state(result), info(info)
+	{}
 private:
-	static QVector<Segment> createSegments(QRectF const& contentRect);
-	static qreal boundDistanceOnSegment(int segment, qreal distance, int numberOfSegments);
+	std::string name;
+	bool state;
+	std::string info;
 
-	QVector<SegmentShape> fixed;
-	QVector<SegmentShape> toGrow;
-	QVector<SegmentShape> toShrink;
-	int stepCount;
+	friend std::ostream& operator<<(std::ostream& os, TestSuite const& suite);
+};*/
+
+
+enum TestResult
+{
+	NOT_RUNNED,
+	OK,
+	KO,
+	FAILED
 };
 
-#endif // SYMBOLSHAPE_H
+inline std::ostream& operator<<(std::ostream& os, TestResult const& result)
+{
+	switch(result)
+	{
+	case NOT_RUNNED:
+		os << "Not Runned";
+		break;
+	case OK:
+		os << "OK";
+		break;
+	case KO:
+		os << "KO";
+		break;
+	case FAILED:
+		os << "Failed";
+	}
+	return os;
+}
+
+
+class Test
+{
+public:
+	Test(std::string const& name, std::function<void()> func): name(name), func(func), result(TestResult::NOT_RUNNED)
+	{}
+
+	void run()
+	{
+		try {
+			func();
+			result = TestResult::OK;//(name, true);
+		} catch(std::exception& ex) {
+			result = TestResult::KO;
+			info = ex.what();//(name, false, ex.what());
+		}
+	}
+
+	std::string const& testname() const { return name; }
+	TestResult state() const { return result; }
+	std::string const& message() const { return info; }
+
+private:
+	std::string name;
+	std::function<void()> func;
+	TestResult result;
+	std::string info;
+};
+
+class TestSuite {
+public:
+	TestSuite(std::string const& name): name(name), maxTitleLength(0)
+	{}
+
+	void test(std::string const& name, std::function<void()> func)
+	{
+		maxTitleLength = std::max(maxTitleLength, name.size());
+		tests.push_back(std::unique_ptr<Test>(new Test(name, func)));
+	}
+
+	void run()
+	{
+		for (auto& test: tests)
+		{
+			test->run();
+		}
+	}
+
+private:
+	std::string name;
+	std::list<std::unique_ptr<Test>> tests;
+	unsigned long maxTitleLength;
+
+	friend std::ostream& operator<<(std::ostream& os, TestSuite const& suite)
+	{
+		os.width(long(suite.maxTitleLength - suite.name.length()/2));
+		os << std::right << suite.name << std::endl;
+		for (auto const& test: suite.tests)
+		{
+			os.width(long(suite.maxTitleLength));
+			os << std::left << test->testname() << " -> ";
+			os << test->state();
+			if (!test->message().empty())
+				os << " Cause: " << test->message();
+			os << std::endl;
+		}
+		return os;
+	}
+};
+
+
+
+}
+}
+
+#endif // TESTSUITE_H

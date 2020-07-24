@@ -519,33 +519,33 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#ifndef SYMBOLSHAPE_H
-#define SYMBOLSHAPE_H
+#ifndef ASSERTIONS_H
+#define ASSERTIONS_H
 
-#include <QVector>
+#include "exceptions.h"
 
-#include <QDebug>
+namespace PumpkinTest {
+namespace Assertions {
 
-#include "segmentshape.h"
-
-class QPainter;
-
-
-class SymbolShape
+inline template<typename T> void assertEquals(T expected, T result)
 {
-public:
-	SymbolShape(QVector<SegmentShape> const& fixed, QVector<SegmentShape> const& toGrow, QVector<SegmentShape> const& toShrink);
-	SymbolShape() = default;
+	if (expected != result)
+		throw PumpkinTest::exceptions::NotEqualsException<T>(expected, result);
+}
 
-	void paint(QPainter& painter, QRectF const& contentRect, qreal distance);
-private:
-	static QVector<Segment> createSegments(QRectF const& contentRect);
-	static qreal boundDistanceOnSegment(int segment, qreal distance, int numberOfSegments);
+inline void assertTrue(bool result)
+{
+	if (!result)
+		throw PumpkinTest::exceptions::NotEqualsException<bool>(true, result);
+}
 
-	QVector<SegmentShape> fixed;
-	QVector<SegmentShape> toGrow;
-	QVector<SegmentShape> toShrink;
-	int stepCount;
-};
+inline void assertFalse(bool result)
+{
+	if (result)
+		throw PumpkinTest::exceptions::NotEqualsException<bool>(false, result);
+}
 
-#endif // SYMBOLSHAPE_H
+}
+}
+
+#endif // ASSERTIONS_H

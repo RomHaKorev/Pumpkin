@@ -519,33 +519,12 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#ifndef SYMBOLSHAPE_H
-#define SYMBOLSHAPE_H
+#include <iostream>
 
-#include <QVector>
+using namespace std;
 
-#include <QDebug>
-
-#include "segmentshape.h"
-
-class QPainter;
-
-
-class SymbolShape
+int main()
 {
-public:
-	SymbolShape(QVector<SegmentShape> const& fixed, QVector<SegmentShape> const& toGrow, QVector<SegmentShape> const& toShrink);
-	SymbolShape() = default;
-
-	void paint(QPainter& painter, QRectF const& contentRect, qreal distance);
-private:
-	static QVector<Segment> createSegments(QRectF const& contentRect);
-	static qreal boundDistanceOnSegment(int segment, qreal distance, int numberOfSegments);
-
-	QVector<SegmentShape> fixed;
-	QVector<SegmentShape> toGrow;
-	QVector<SegmentShape> toShrink;
-	int stepCount;
-};
-
-#endif // SYMBOLSHAPE_H
+	cout << "Hello World!" << endl;
+	return 0;
+}

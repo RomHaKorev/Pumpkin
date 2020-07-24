@@ -1,3 +1,7 @@
 TEMPLATE = subdirs
 
-SUBDIRS += src-sevensegments
+SUBDIRS += src-sevensegments \
+           tests-sevensgements
+
+
+tests-sevensgements.depends = src-sevensegments

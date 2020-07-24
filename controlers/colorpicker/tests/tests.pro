@@ -9,15 +9,19 @@ QMAKE_LFLAGS += --coverage -O0
 
 TEMPLATE = app
 
-HEADERS += tst_colorpickerutiltest.h \
-    tst_colorpickerrenderertest.h
+HEADERS +=
 
 
-SOURCES += 	main.cpp
+SOURCES += 	main.cpp \
+    tst_colorpickerrenderertest.cpp \
+    tst_colorpickerutiltest.cpp
 
 
 DISTFILES += \
     ../src/qml/qmldir
+
+
+include(../../../Pumpkin-test-framework/pumpkin-test-framework.pri)
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../src/release/ -lPumpkinControlers
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../src/debug/ -lPumpkinControlers

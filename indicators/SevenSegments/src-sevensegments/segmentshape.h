@@ -519,33 +519,28 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#ifndef SYMBOLSHAPE_H
-#define SYMBOLSHAPE_H
+#ifndef SEGMENTSHAPE_H
+#define SEGMENTSHAPE_H
 
-#include <QVector>
+#include "segment.h"
 
-#include <QDebug>
-
-#include "segmentshape.h"
-
-class QPainter;
-
-
-class SymbolShape
-{
-public:
-	SymbolShape(QVector<SegmentShape> const& fixed, QVector<SegmentShape> const& toGrow, QVector<SegmentShape> const& toShrink);
-	SymbolShape() = default;
-
-	void paint(QPainter& painter, QRectF const& contentRect, qreal distance);
-private:
-	static QVector<Segment> createSegments(QRectF const& contentRect);
-	static qreal boundDistanceOnSegment(int segment, qreal distance, int numberOfSegments);
-
-	QVector<SegmentShape> fixed;
-	QVector<SegmentShape> toGrow;
-	QVector<SegmentShape> toShrink;
-	int stepCount;
+enum Action {
+	Keep,
+	Add,
+	Remove
 };
 
-#endif // SYMBOLSHAPE_H
+struct SegmentShape
+{
+
+	SegmentShape(int index, int step, Action action, int actionThrough=-1);
+	int index;
+	int step;
+	Action action;
+	int actionThrough;
+
+	bool actionThroughConnectedByStartPoint();
+};
+
+
+#endif // SEGMENTSHAPE_H
