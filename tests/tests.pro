@@ -1,11 +1,13 @@
-QT += testlib
 QT += quick widgets quickwidgets
 
-CONFIG += qt console warn_on depend_includepath testcase
+CONFIG += qt console warn_on depend_includepath c++11
 CONFIG -= app_bundle
 
-#QMAKE_CXXFLAGS += --coverage -O0
-#QMAKE_LFLAGS += --coverage -O0
+QMAKE_CXXFLAGS += --coverage -O0
+QMAKE_LFLAGS += --coverage -O0
+
+QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0 --coverage
+QMAKE_LFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0 --coverage
 
 TEMPLATE = app
 
@@ -15,7 +17,8 @@ HEADERS +=
 SOURCES += 	main.cpp \
     tst_colorpickerrenderertest.cpp \
     tst_colorpickerutiltest.cpp \
-    tst_sevensegmenttest.cpp
+    tst_sevensegmenttest.cpp \
+    tst_symboltest.cpp
 
 
 DISTFILES += \

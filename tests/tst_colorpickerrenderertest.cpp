@@ -1,5 +1,3 @@
-#include <QtTest>
-
 #include "../controlers/colorpicker/widgets/colorpicker.h"
 #include "../controlers/colorpicker/common/colorpickerrenderer.h"
 

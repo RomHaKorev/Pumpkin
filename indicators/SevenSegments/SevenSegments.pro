@@ -22,3 +22,6 @@ SOURCES += \
     utils/symbol_p.cpp \
     segmentshape.cpp
 
+
+QMAKE_CXXFLAGS += --coverage -fprofile-arcs -ftest-coverage
+QMAKE_LFLAGS   += --coverage -lgcov

@@ -1,9 +1,6 @@
-#include <QtTest>
-
 #include "../indicators/sevensegments/utils/sevensegmentsutils.h"
 
 #include <pumpkintest.h>
-
 #include <assertions.h>
 
 inline std::ostream& operator<<(std::ostream& os, QPointF const& s)

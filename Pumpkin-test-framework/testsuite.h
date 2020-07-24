@@ -528,6 +528,7 @@ Version 1.0 dated 2006-09-05.
 #include <sstream>
 #include <iostream>
 #include <math.h>
+#include <map>
 
 namespace PumpkinTest {
 namespace details {
@@ -577,14 +578,13 @@ inline std::ostream& operator<<(std::ostream& os, TestResult const& result)
 	return os;
 }
 
-
 class Test
 {
 public:
 	Test(std::string const& name, std::function<void()> func): name(name), func(func), result(TestResult::NOT_RUNNED)
 	{}
 
-	void run()
+	TestResult run()
 	{
 		try {
 			func();
@@ -593,6 +593,7 @@ public:
 			result = TestResult::KO;
 			info = ex.what();//(name, false, ex.what());
 		}
+		return result;
 	}
 
 	std::string const& testname() const { return name; }
@@ -605,6 +606,52 @@ private:
 	TestResult result;
 	std::string info;
 };
+
+class Summary: public std::map<TestResult, int>
+{
+public:
+	Summary()
+	{
+		insert(std::pair<TestResult, int>(TestResult::OK, 0));
+		insert(std::pair<TestResult, int>(TestResult::KO, 0));
+		insert(std::pair<TestResult, int>(TestResult::FAILED, 0));
+		insert(std::pair<TestResult, int>(TestResult::NOT_RUNNED, 0));
+	}
+
+	Summary& operator+=(Summary const& other)
+	{
+		for (auto input: other)
+		{
+			this->operator[](input.first) += input.second;
+		}
+		return *this;
+	}
+};
+
+inline std::ostream& operator<<(std::ostream& os, Summary const& s)
+{
+	bool first = true;
+	auto dump = [&](TestResult r, std::string const& suffix)
+	{
+		if (s.at(r) == 0)
+			return;
+		if (first == false)
+			os << ", ";
+		first = false;
+
+		if (s.at(r) == 1)
+			os << s.at(r) << " test " << suffix << std::endl;
+		else if (s.at(r) > 1)
+			os << s.at(r) << " tests " << suffix << std::endl;
+	};
+
+	os << "Summary: ";
+	dump(TestResult::OK, "passed");
+	dump(TestResult::KO, "failed");
+	dump(TestResult::FAILED, "failed with error");
+
+	return os;
+}
 
 class TestSuite {
 public:
@@ -619,12 +666,14 @@ public:
 		tests.push_back(std::unique_ptr<Test>(new Test(name, func)));
 	}
 
-	void run()
+	Summary run()
 	{
+		Summary summary;
 		for (auto& test: tests)
 		{
-			test->run();
+			summary[test->run()]++;
 		}
+		return summary;
 	}
 
 	static size_t& maxTitleLength(size_t newValue=0)

@@ -31,11 +31,11 @@ SOURCES += \
     main.cpp
 
 
+debug:QMAKE_CXXFLAGS += --coverage    # -fprofile-arcs -ftest-coverage
+debug:QMAKE_LFLAGS   += --coverage    # -lgcov
 
 INCLUDEPATH += $$PWD/../itemviews/treeview
 DEPENDPATH += $$PWD/../itemviews/treeview
-
-
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../controlers/colorpicker/src/release/ -lPumpkinControlers

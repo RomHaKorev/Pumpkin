@@ -1,4 +1,6 @@
 #!/bin/sh
+
+set -x
  
 ############################################################################################################
 # You should edit the following 3 paths when necessary
@@ -8,10 +10,10 @@
 SCRIPT_DIR=$(dirname $0)
 
 # SRC_DIR is the directory containing the .gcno files (%{buildDir} in Qt Creator)
-SRC_DIR="$SCRIPT_DIR/../build-Pumpkin-Desktop-Debug//controlers/colorpicker/tests/"
+SRC_DIR="$SCRIPT_DIR/../build-Pumpkin-Desktop-Debug/"
 
 # COV_DIR is the directory where the coverage results will be stored
-COV_DIR="$SCRIPT_DIR/../coverage"
+COV_DIR="$SCRIPT_DIR/coverage"
 
 ############################################################################################################
 
@@ -23,9 +25,15 @@ mkdir -p ${HTML_RESULTS}
 
 # Generate our initial info
 #lcov -d "${SRC_DIR}" -c -o "${COV_DIR}/coverage.info"
-for f in `find $SRC_DIR -name "*.gcda" -exec dirname {} \; | s rt -u`; do
-	lcov -d "$f" -c -o "${COV_DIR}/coverage.info"
+
+opt=""
+for f in `find $SRC_DIR -name "*.gcda" -exec dirname {} \; | sort -u`; do
+	FILENAME=$(basename $f)
+	lcov -d "$f" -c -o "${COV_DIR}/${FILENAME}.info" 
+	opt="-a ${COV_DIR}/${FILENAME}.info ${opt}"
 done
+
+lcov $opt -o ${COV_DIR}/coverage.info
 
 # Remove some paths/files which we don't want to calculate the code coverage (e.g. third party libraries) and generate a new coverage file filtered (feel free to edit it when necessary)
 lcov -r "${COV_DIR}/coverage.info" "*Qt*.framework*" "*/tests/*" "*Xcode.app*" "*.moc" "*moc_*.cpp" "*/test/*" "*/build*/*" -o "${COV_DIR}/coverage-filtered.info"

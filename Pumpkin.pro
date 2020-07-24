@@ -8,4 +8,4 @@ SUBDIRS += indicators \
     tests
 
 Demo.depends = indicators controlers PumpkinML
-tests.depends = Demo
+tests.depends = indicators controlers

@@ -517,75 +517,38 @@ jurisdiction, by the more diligent Party.
 Version 1.0 dated 2006-09-05.
 */
 
+#include <pumpkintest.h>
+#include <assertions.h>
 
+#include "../indicators/sevensegments/symbol.h"
 
-#ifndef AUTOREGISTER_H
-#define AUTOREGISTER_H
-
-#include <vector>
-#include <iostream>
-
-#include "testsuite.h"
-
-
-namespace PumpkinTest {
-
-namespace details {
-class AutoRegisteredTestFactory
+/*inline std::ostream& operator<<(std::ostream& os, QPointF const& s)
 {
-public:
-	AutoRegisteredTestFactory(){}
-};
+	os << s.x() << ";" << s.y();
+	return os;
 }
 
-class AutoRegisteredTest: public PumpkinTest::details::TestSuite
+
+inline std::ostream& operator<<(std::ostream& os, Segment const& s)
+{
+	os << "Segment(" << s.p1() << ", " << s.p2() << ")";
+	return os;
+}*/
+
+class SymbolTest : public PumpkinTest::AutoRegisteredTest
 {
 public:
-	AutoRegisteredTest(std::string const& name): PumpkinTest::details::TestSuite(name)
-	{}
-};
-
-class AutoRegisteredTests
-{
-public:
-	AutoRegisteredTests()
-	{}
-
-	virtual ~AutoRegisteredTests() = 0;
-private:
-	static std::vector<std::shared_ptr<AutoRegisteredTest>>& factories()
+	SymbolTest(): PumpkinTest::AutoRegisteredTest("Symbol Test")
 	{
-		static std::vector<std::shared_ptr<AutoRegisteredTest>> f = std::vector<std::shared_ptr<AutoRegisteredTest>>();
-		return f;
-	}
-	template<typename T> friend class AutoRegistration;
-	friend int runAll();
-};
+		test("Symbol", []()
+		{
+			Symbol s;
+		});
 
-template<typename T> class AutoRegistration: public details::AutoRegisteredTestFactory
-{
-public:
-	AutoRegistration()
-	{
-		AutoRegisteredTests::factories().push_back(std::shared_ptr<T>(new T()));
+
 	}
 };
 
-inline int runAll()
-{
-	PumpkinTest::details::Summary summary;
-	for (auto test : AutoRegisteredTests::factories())
-		summary += test->run();
-	for (auto test : AutoRegisteredTests::factories())
-		std::cout << *test;
-
-	std::cout << std::endl << summary << std::endl;
-	return 0;
-}
-
-}
+REGISTER_TEST(SymbolTest)
 
 
-#define REGISTER_TEST(T) static const PumpkinTest::AutoRegistration<T> T ## Inst = PumpkinTest::AutoRegistration<T>();
-
-#endif // AUTOREGISTER_H

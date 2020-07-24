@@ -525,5 +525,7 @@ int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
 	app.setAttribute(Qt::AA_Use96Dpi, true);
-	return PumpkinTest::runAll();
+	PumpkinTest::runAll();
+
+	return 0;
 }
