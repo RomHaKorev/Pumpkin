@@ -527,7 +527,7 @@ Version 1.0 dated 2006-09-05.
 namespace PumpkinTest {
 namespace Assertions {
 
-inline template<typename T> void assertEquals(T expected, T result)
+template<typename T> void assertEquals(T expected, T result)
 {
 	if (expected != result)
 		throw PumpkinTest::exceptions::NotEqualsException<T>(expected, result);

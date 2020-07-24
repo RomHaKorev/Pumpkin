@@ -1,8 +1,7 @@
 #include <QtTest>
 
-#include "../src/widgets/colorpicker.h"
-
-#include "../src/common/colorpickerrenderer.h"
+#include "../controlers/colorpicker/widgets/colorpicker.h"
+#include "../controlers/colorpicker/common/colorpickerrenderer.h"
 
 #include <pumpkintest.h>
 #include <assertions.h>

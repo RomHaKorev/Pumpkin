@@ -1,6 +1,6 @@
 #include <QtTest>
 
-#include "../src-sevensegments/utils/sevensegmentsutils.h"
+#include "../indicators/sevensegments/utils/sevensegmentsutils.h"
 
 #include <pumpkintest.h>
 

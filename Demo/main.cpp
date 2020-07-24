@@ -41,13 +41,12 @@ knowledge of the CeCILL-C license and that you accept its terms.
 
 
 
-#include "../controlers/colorpicker/src/qml/colorpickerqml.h"
-#include "../controlers/colorpicker/src/widgets/colorpicker.h"
-#include "../indicators/gauges/src/pumpkin_gauges.h"
+#include "../controlers/colorpicker/qml/colorpickerqml.h"
+#include "../controlers/colorpicker/widgets/colorpicker.h"
+#include "../indicators/gauges/pumpkin_gauges.h"
 
-#include "../indicators/SevenSegments/src-sevensegments/sevensegmentsml.h"
-
-#include "../indicators/SevenSegments/src-sevensegments/symbol.h"
+#include "../indicators/sevensegments/sevensegmentsml.h"
+#include "../indicators/sevensegments/symbol.h"
 
 int main(int argc, char *argv[])
 {

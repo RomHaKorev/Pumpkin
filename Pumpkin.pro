@@ -1,10 +1,11 @@
 TEMPLATE = subdirs
 
 SUBDIRS += indicators \
-    Sandbox \
     controlers \
     PumpkinML \
     Demo \
-    itemviews
+    itemviews \
+    tests
 
 Demo.depends = indicators controlers PumpkinML
+tests.depends = Demo

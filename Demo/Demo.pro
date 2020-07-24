@@ -45,34 +45,44 @@ else:unix: LIBS += -L$$OUT_PWD/../controlers/colorpicker/src/ -lPumpkinControler
 INCLUDEPATH += $$PWD/../controlers/colorpicker/src
 DEPENDPATH += $$PWD/../controlers/colorpicker/src
 
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../controlers/colorpicker/src/release/libPumpkinControlers.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../controlers/colorpicker/src/debug/libPumpkinControlers.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../controlers/colorpicker/src/release/PumpkinControlers.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../controlers/colorpicker/src/debug/PumpkinControlers.lib
-else:unix: PRE_TARGETDEPS += $$OUT_PWD/../controlers/colorpicker/src/libPumpkinControlers.a
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../indicators/gauges/src/release/ -lPumpkinGauges
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../indicators/gauges/src/debug/ -lPumpkinGauges
-else:unix: LIBS += -L$$OUT_PWD/../indicators/gauges/src/ -lPumpkinGauges
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../controlers/colorpicker/release/ -lPumpkinControlers
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../controlers/colorpicker/debug/ -lPumpkinControlers
+else:unix: LIBS += -L$$OUT_PWD/../controlers/colorpicker/ -lPumpkinControlers
 
-INCLUDEPATH += $$PWD/../indicators/gauges/src
-DEPENDPATH += $$PWD/../indicators/gauges/src
+INCLUDEPATH += $$PWD/../controlers/colorpicker
+DEPENDPATH += $$PWD/../controlers/colorpicker
 
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../indicators/gauges/src/release/libPumpkinGauges.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../indicators/gauges/src/debug/libPumpkinGauges.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../indicators/gauges/src/release/PumpkinGauges.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../indicators/gauges/src/debug/PumpkinGauges.lib
-else:unix: PRE_TARGETDEPS += $$OUT_PWD/../indicators/gauges/src/libPumpkinGauges.a
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../controlers/colorpicker/release/libPumpkinControlers.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../controlers/colorpicker/debug/libPumpkinControlers.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../controlers/colorpicker/release/PumpkinControlers.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../controlers/colorpicker/debug/PumpkinControlers.lib
+else:unix: PRE_TARGETDEPS += $$OUT_PWD/../controlers/colorpicker/libPumpkinControlers.a
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../indicators/SevenSegments/src-sevensegments/release/ -lPumpkinSevenSegments
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../indicators/SevenSegments/src-sevensegments/debug/ -lPumpkinSevenSegments
-else:unix: LIBS += -L$$OUT_PWD/../indicators/SevenSegments/src-sevensegments/ -lPumpkinSevenSegments
 
-INCLUDEPATH += $$PWD/../indicators/SevenSegments/src-sevensegments
-DEPENDPATH += $$PWD/../indicators/SevenSegments/src-sevensegments
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../indicators/gauges/release/ -lPumpkinGauges
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../indicators/gauges/debug/ -lPumpkinGauges
+else:unix: LIBS += -L$$OUT_PWD/../indicators/gauges/ -lPumpkinGauges
 
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../indicators/SevenSegments/src-sevensegments/release/libPumpkinSevenSegments.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../indicators/SevenSegments/src-sevensegments/debug/libPumpkinSevenSegments.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../indicators/SevenSegments/src-sevensegments/release/PumpkinSevenSegments.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../indicators/SevenSegments/src-sevensegments/debug/PumpkinSevenSegments.lib
-else:unix: PRE_TARGETDEPS += $$OUT_PWD/../indicators/SevenSegments/src-sevensegments/libPumpkinSevenSegments.a
+INCLUDEPATH += $$PWD/../indicators/gauges
+DEPENDPATH += $$PWD/../indicators/gauges
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../indicators/gauges/release/libPumpkinGauges.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../indicators/gauges/debug/libPumpkinGauges.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../indicators/gauges/release/PumpkinGauges.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../indicators/gauges/debug/PumpkinGauges.lib
+else:unix: PRE_TARGETDEPS += $$OUT_PWD/../indicators/gauges/libPumpkinGauges.a
+
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../indicators/sevensegments/release/ -lPumpkinSevenSegments
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../indicators/sevensegments/debug/ -lPumpkinSevenSegments
+else:unix: LIBS += -L$$OUT_PWD/../indicators/sevensegments/ -lPumpkinSevenSegments
+
+INCLUDEPATH += $$PWD/../indicators/sevensegments
+DEPENDPATH += $$PWD/../indicators/sevensegments
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../indicators/sevensegments/release/libPumpkinSevenSegments.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../indicators/sevensegments/debug/libPumpkinSevenSegments.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../indicators/sevensegments/release/PumpkinSevenSegments.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../indicators/sevensegments/debug/PumpkinSevenSegments.lib
+else:unix: PRE_TARGETDEPS += $$OUT_PWD/../indicators/sevensegments/libPumpkinSevenSegments.a

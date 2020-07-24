@@ -561,16 +561,18 @@ inline std::ostream& operator<<(std::ostream& os, TestResult const& result)
 	switch(result)
 	{
 	case NOT_RUNNED:
-		os << "Not Runned";
+		os << "\033[0;33mNot runned\033[0m";
 		break;
 	case OK:
-		os << "OK";
+		//os << "OK";
+		os << "\033[0;32mOK\033[0m";
 		break;
 	case KO:
-		os << "KO";
+		os << "\033[0;31mKO\033[0m";
+		//os << "KO";
 		break;
 	case FAILED:
-		os << "Failed";
+		os << "\033[1;31mFailed\033[0m";
 	}
 	return os;
 }
@@ -606,12 +608,14 @@ private:
 
 class TestSuite {
 public:
-	TestSuite(std::string const& name): name(name), maxTitleLength(0)
-	{}
+	TestSuite(std::string const& name): name(name)
+	{
+		maxSuiteTitleLength(name.size());
+	}
 
 	void test(std::string const& name, std::function<void()> func)
 	{
-		maxTitleLength = std::max(maxTitleLength, name.size());
+		maxTitleLength(name.size());
 		tests.push_back(std::unique_ptr<Test>(new Test(name, func)));
 	}
 
@@ -623,23 +627,40 @@ public:
 		}
 	}
 
+	static size_t& maxTitleLength(size_t newValue=0)
+	{
+		static size_t s = 0;
+		s = std::max(newValue, s);
+		return s;
+	}
+
+	static size_t& maxSuiteTitleLength(size_t newValue=0)
+	{
+		static size_t s = 0;
+		s = std::max(newValue, s);
+		return s;
+	}
+
 private:
 	std::string name;
 	std::list<std::unique_ptr<Test>> tests;
-	unsigned long maxTitleLength;
 
 	friend std::ostream& operator<<(std::ostream& os, TestSuite const& suite)
 	{
-		os.width(long(suite.maxTitleLength - suite.name.length()/2));
-		os << std::right << suite.name << std::endl;
+		os << suite.name << std::string(maxSuiteTitleLength() - suite.name.size(), ' ');
+		bool first = true;
 		for (auto const& test: suite.tests)
 		{
-			os.width(long(suite.maxTitleLength));
-			os << std::left << test->testname() << " -> ";
+			if (!first)
+				os << std::string(maxSuiteTitleLength(), ' ');
+			os << " | ";
+			os.width(long(maxTitleLength()));
+			os << std::left << test->testname() << " | ";
 			os << test->state();
 			if (!test->message().empty())
 				os << " Cause: " << test->message();
 			os << std::endl;
+			first = false;
 		}
 		return os;
 	}
