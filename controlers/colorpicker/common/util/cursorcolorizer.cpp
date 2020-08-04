@@ -523,7 +523,7 @@ Version 1.0 dated 2006-09-05.
 
 #include "colortoangleconverter.h"
 
-CursorColorizer::CursorColorizer(int angleMin, int angleMax): angleMin(angleMin), angleMax(angleMax)
+CursorColorizer::CursorColorizer()
 {}
 
 
@@ -540,6 +540,6 @@ QColor CursorColorizer::operator()(QColor const& reference) const
 	angle -= 70;
 	saturation = 255 - (angle / 50.0) * 255;
 
-	white.setHsv(white.hue(), 255, saturation);
+	white.setHsv(white.hue(), 255, int(saturation));
 	return white;
 }

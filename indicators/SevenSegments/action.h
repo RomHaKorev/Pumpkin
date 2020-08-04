@@ -519,16 +519,13 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#ifndef CURSORCOLORIZER_H
-#define CURSORCOLORIZER_H
+#ifndef ACTION_H
+#define ACTION_H
 
-#include <QColor>
-
-class CursorColorizer
-{
-public:
-	CursorColorizer();
-	QColor operator()(QColor const&) const;
+enum Action {
+	Keep,
+	Add,
+	Remove
 };
 
-#endif // CURSORCOLORIZER_H
+#endif // ACTION_H

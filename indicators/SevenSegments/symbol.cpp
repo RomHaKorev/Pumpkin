@@ -520,14 +520,14 @@ Version 1.0 dated 2006-09-05.
 
 
 #include "symbol.h"
-#include "utils/symbol_p.h"
 
+#if 0
 QDebug& operator<<(QDebug& os, SegmentShape const& s)
 {
 	os.nospace() << s.index << "/" << s.step;
 	return os;
 }
-
+#endif
 
 
 Symbol::Symbol(Segments const& indexes): indexes(indexes.begin(), indexes.end())
@@ -544,171 +544,11 @@ public:
 
 typedef QVector<int> Segments;
 
-Segments filter(Segments const& collection, std::function<bool(int const&)> const& predicate)
+
+
+SymbolTransformation Symbol::to(Symbol const& destination) const
 {
-	Segments filtered;
-	for (auto item: collection)
-		if (predicate(item))
-			filtered << item;
-	return filtered;
-}
-
-Segments filter(Symbol const& collection, std::function<bool(int)> const& predicate)
-{
-	Segments filtered;
-	for (auto item: collection)
-		if (predicate(item))
-			filtered << item;
-	return filtered;
-}
-
-Segments neighbours(int segment)
-{
-	Segments segments;
-	switch(segment)
-	{
-	case 0:
-		return Segments() << 1 << 6;
-	case 6:
-		return Segments() << 1 << 2 << 4 << 5;
-	case 1:
-	case 2:
-	case 4:
-	case 5:
-		segments << 6;
-		break;
-	default:
-		break;
-	}
-
-	segments << segment - 1 << segment + 1;
-	std::sort(segments.begin(), segments.end());
-
-	return segments;
-}
-
-QVector<SegmentShape> sequence(QVector<SegmentShape> const& commonShapes, Segments indexes, Action action)
-{
-	QVector<SegmentShape> shapes;
-	int maxSteps = 7;
-
-	if (commonShapes.empty())
-	{
-		auto i = indexes.takeFirst();
-		shapes << SegmentShape(i, 0, Action::Add, -1);
-	}
-
-	while(!indexes.empty())
-	{
-		auto i = indexes.takeFirst();
-		auto n = neighbours(i);
-		int step = INT_MAX;
-		int selectedNeighbour = INT_MAX;
-		for (SegmentShape s: (commonShapes + shapes))
-		{
-			if (n.contains(s.index) && (s.step + 1) < step)
-			{
-				step = s.step + 1;
-				selectedNeighbour = s.index;
-			}
-		}
-		if (step == INT_MAX)
-		{
-			indexes.push_back(i);
-			continue;
-		}
-		shapes << SegmentShape(i, step, action, selectedNeighbour);
-		--maxSteps;
-		if (maxSteps == 0)
-		{
-			indexes << i;
-			break;
-		}
-	}
-	for (auto i: indexes)
-		shapes << SegmentShape(i, 0, action);
-	return shapes;
-}
-
-SymbolShape Symbol::to(Symbol const& destination) const
-{
-	qDebug() << "from" << this->indexes << "to" << destination.indexes;
-	if (this->indexes.empty())
-	{
-		QVector<SegmentShape> shapes;
-		for (auto i: destination.indexes)
-			shapes << SegmentShape(i, 0, Action::Add, -1);
-		return SymbolShape(QVector<SegmentShape>(), shapes, QVector<SegmentShape>());
-	}
-
-	Segments common = filter(*this, [destination](int segment) {
-		return destination.contains(segment);
-	});
-
-	Segments toRemove = filter(*this, [destination](int segment) {
-		return !destination.contains(segment);
-	});
-
-	Segments toAdd = filter(destination, [this](int segment) {
-		return !this->contains(segment);
-	});
-
-
-	QVector<SegmentShape> commonShapes;
-	for (int i: common)
-		commonShapes << SegmentShape(i, 0, Action::Keep);
-
-
-	qDebug() << "Fixed" << commonShapes;
-	QVector<SegmentShape> shapesToAdd = sequence(commonShapes, toAdd, Action::Add);
-	QVector<SegmentShape> shapesToRemove = sequence(commonShapes, toRemove, Action::Remove);
-
-	bool changed = true;
-	int maxLoop = 7;
-	while(changed && maxLoop-- != 0)
-	{
-		changed = false;
-		for (SegmentShape& shape: shapesToRemove)
-		{
-			auto through = std::find_if(shapesToRemove.begin(), shapesToRemove.end(), [shape](SegmentShape& other){
-				return other.index == shape.actionThrough;
-			});
-			if (through == nullptr || through->action != Action::Remove || through->step > shape.step)
-				continue;
-
-			//qDebug() << "swap" << shape << " " << *through;
-			int tmp = through->step;
-			through->step = shape.step;
-			shape.step = tmp;
-			changed = true;
-		}
-	}
-
-	if (maxLoop == 0)
-	{
-		qWarning() << "Error swap for " << this->indexes << "to" << destination.indexes;
-		exit(0);
-	}
-
-	auto action= [](Action a) {
-		switch(a)
-		{
-		case Keep:
-			return "Kept";
-		case Remove:
-			return "Removed";
-		case Add:
-			return "Added";
-		}
-		return "???";
-	};
-
-	for (auto segment: commonShapes + shapesToAdd + shapesToRemove)
-	{
-		qDebug() << segment.index << "will be" << action(segment.action) << "at step" << segment.step << "through" << segment.actionThrough;
-	}
-
-	return SymbolShape(commonShapes, shapesToAdd, shapesToRemove);
+	return SymbolTransformation(*this, destination);
 }
 
 bool Symbol::contains(int segment) const

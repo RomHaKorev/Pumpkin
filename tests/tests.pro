@@ -1,13 +1,17 @@
 QT += quick widgets quickwidgets
 
-CONFIG += qt console warn_on depend_includepath c++11
-CONFIG -= app_bundle
+CONFIG += qt warn_on depend_includepath c++11
+CONFIG -= app_bundle console
 
 QMAKE_CXXFLAGS += --coverage -O0
 QMAKE_LFLAGS += --coverage -O0
 
 QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0 --coverage
 QMAKE_LFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0 --coverage
+
+QMAKE_POST_LINK = rm -f "*.gcda"
+
+DEFINES += PUMPKINTEST_ASSERTION_COUNTER
 
 TEMPLATE = app
 
@@ -18,7 +22,9 @@ SOURCES += 	main.cpp \
     tst_colorpickerrenderertest.cpp \
     tst_colorpickerutiltest.cpp \
     tst_sevensegmenttest.cpp \
-    tst_symboltest.cpp
+    tst_symboltest.cpp \
+    tst_symboltransformationtest.cpp \
+    tst_sevensegmentsml.cpp
 
 
 DISTFILES += \

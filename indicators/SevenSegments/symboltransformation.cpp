@@ -519,16 +519,167 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#ifndef CURSORCOLORIZER_H
-#define CURSORCOLORIZER_H
+#include "symboltransformation.h"
+#include "symbol.h"
 
-#include <QColor>
-
-class CursorColorizer
+Segments neighbours(int segment)
 {
-public:
-	CursorColorizer();
-	QColor operator()(QColor const&) const;
-};
+	Segments segments;
+	switch(segment)
+	{
+	case 0:
+		return Segments() << 1 << 6;
+	case 6:
+		return Segments() << 1 << 2 << 4 << 5;
+	case 1:
+	case 2:
+	case 4:
+	case 5:
+		segments << 6;
+		break;
+	default:
+		break;
+	}
 
-#endif // CURSORCOLORIZER_H
+	segments << segment - 1 << segment + 1;
+	std::sort(segments.begin(), segments.end());
+
+	return segments;
+}
+
+QVector<SegmentShape> sequence(QVector<SegmentShape> const& commonShapes, Segments indexes, Action action)
+{
+	QVector<SegmentShape> shapes;
+
+
+	if (commonShapes.empty())
+	{
+		auto i = indexes.takeFirst();
+		shapes << SegmentShape(i, 0, action, -1);
+	}
+
+	int maxSteps = 7;
+	while(!indexes.empty() && maxSteps != 0)
+	{
+		--maxSteps;
+		auto i = indexes.takeFirst();
+		auto n = neighbours(i);
+		int step = INT_MAX;
+		int selectedNeighbour = INT_MAX;
+		for (SegmentShape s: (commonShapes + shapes))
+		{
+			if (n.contains(s.index) && (s.step + 1) < step)
+			{
+				step = s.step + 1;
+				selectedNeighbour = s.index;
+			}
+		}
+		if (step == INT_MAX)
+		{
+			indexes.push_back(i);
+			continue;
+		}
+		shapes << SegmentShape(i, step, action, selectedNeighbour);
+	}
+	for (auto i: indexes)
+		shapes << SegmentShape(i, 0, action);
+	return shapes;
+}
+
+
+#if 0
+Segments filter(Segments const& collection, std::function<bool(int const&)> const& predicate)
+{
+	Segments filtered;
+	for (auto item: collection)
+		if (predicate(item))
+			filtered << item;
+	return filtered;
+}
+#endif
+
+Segments filter(Symbol const& collection, std::function<bool(int)> const& predicate)
+{
+	Segments filtered;
+	for (auto item: collection)
+		if (predicate(item))
+			filtered << item;
+	return filtered;
+}
+
+SymbolTransformation::SymbolTransformation(Symbol const& source, Symbol const& destination)
+{
+	if (source.indexes.empty())
+	{
+		for (auto i: destination.indexes)
+			shapesToAdd << SegmentShape(i, 0, Action::Add, -1);
+		return;
+	}
+
+	Segments common = filter(source, [&destination](int segment) {
+		return destination.contains(segment);
+	});
+
+	Segments toRemove = filter(source, [&destination](int segment) {
+		return !destination.contains(segment);
+	});
+
+	Segments toAdd = filter(destination, [&source](int segment) {
+		return !source.contains(segment);
+	});
+
+
+	for (int i: common)
+		commonShapes << SegmentShape(i, 0, Action::Keep);
+
+
+	shapesToAdd = sequence(commonShapes, toAdd, Action::Add);
+	shapesToRemove = sequence(commonShapes, toRemove, Action::Remove);
+
+	bool changed = true;
+	int maxLoop = 7;
+	while(changed && maxLoop-- != 0)
+	{
+		changed = false;
+		for (SegmentShape& shape: shapesToRemove)
+		{
+			auto through = std::find_if(shapesToRemove.begin(), shapesToRemove.end(), [shape](SegmentShape& other){
+				return other.index == shape.actionThrough;
+			});
+			if (through == nullptr || through->action != Action::Remove || through->step > shape.step)
+				continue;
+			int tmp = through->step;
+			through->step = shape.step;
+			shape.step = tmp;
+			changed = true;
+		}
+	}
+
+	auto action= [](Action a) {
+		switch(a)
+		{
+		case Keep:
+			return "Kept";
+		case Remove:
+			return "Removed";
+		case Add:
+			return "Added";
+		}
+	};
+#if 0
+	for (auto segment: commonShapes + shapesToAdd + shapesToRemove)
+	{
+		qDebug() << segment.index << "will be" << action(segment.action) << "at step" << segment.step << "through" << segment.actionThrough;
+	}
+#endif
+}
+
+int SymbolTransformation::stepCount() const
+{
+	static int max = 0;
+	for (auto list: commonShapes + shapesToRemove + shapesToAdd)
+	{
+		max = std::max(list.step + 1, max);
+	}
+	return max;
+}

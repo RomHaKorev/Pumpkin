@@ -519,16 +519,40 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#ifndef CURSORCOLORIZER_H
-#define CURSORCOLORIZER_H
+#ifndef SYMBOLTRANSFORMATION_H
+#define SYMBOLTRANSFORMATION_H
 
-#include <QColor>
+#include <QVector>
+//#include "symbol.h"
 
-class CursorColorizer
+#include "action.h"
+#include "segmentshape.h"
+
+class Symbol;
+
+class SymbolTransformation
 {
 public:
-	CursorColorizer();
-	QColor operator()(QColor const&) const;
+	SymbolTransformation(Symbol const& source, Symbol const& destination);
+	SymbolTransformation() = default;
+	QVector<SegmentShape> segmentToTransform(Action action) const
+	{
+		switch(action)
+		{
+		case Keep:
+			return commonShapes;
+		case Remove:
+			return shapesToRemove;
+		case Add:
+			return shapesToAdd;
+		}
+	}
+
+	int stepCount() const;
+private:
+	QVector<SegmentShape> commonShapes;
+	QVector<SegmentShape> shapesToAdd;
+	QVector<SegmentShape> shapesToRemove;
 };
 
-#endif // CURSORCOLORIZER_H
+#endif // SYMBOLTRANSFORMATION_H

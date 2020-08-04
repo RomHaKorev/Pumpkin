@@ -519,16 +519,62 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#ifndef CURSORCOLORIZER_H
-#define CURSORCOLORIZER_H
+#ifndef PUMPKIN_TEST_ASSERTIONS_H
+#define PUMPKIN_TEST_ASSERTIONS_H
 
-#include <QColor>
+#include "exceptions.h"
 
-class CursorColorizer
+namespace PumpkinTest {
+namespace Assertions {
+
+#ifndef PUMPKINTEST_ASSERTION_COUNTER_INC
+#ifdef PUMPKINTEST_ASSERTION_COUNTER
+inline int& counter(int value = -1)
 {
-public:
-	CursorColorizer();
-	QColor operator()(QColor const&) const;
-};
+	static int c = 0;
+	if (value != -1)
+		c = value;
+	return c;
+}
+#define PUMPKINTEST_ASSERTION_COUNTER_INC ++counter();
+#else
+#define PUMPKINTEST_ASSERTION_COUNTER_INC
+#endif
+#endif
 
-#endif // CURSORCOLORIZER_H
+template<typename T> void assertEquals(T expected, T result)
+{
+PUMPKINTEST_ASSERTION_COUNTER_INC
+	if (!(expected == result))
+		throw PumpkinTest::exceptions::NotEqualsException<T>(expected, result);
+}
+
+inline void assertTrue(bool result)
+{
+	PUMPKINTEST_ASSERTION_COUNTER_INC
+	if (!result)
+		throw PumpkinTest::exceptions::BooleanException(true);
+}
+
+inline void assertFalse(bool result)
+{
+	PUMPKINTEST_ASSERTION_COUNTER_INC
+	if (result)
+		throw PumpkinTest::exceptions::BooleanException(false);
+}
+
+template<class T, typename U> void assertContains(T const& collection, U const& value)
+{
+	PUMPKINTEST_ASSERTION_COUNTER_INC
+	for (auto const& item: collection)
+	{
+		if (item == value)
+			return;
+	}
+	throw PumpkinTest::exceptions::MissingItemInCollectionException<T, U>(collection, value);
+}
+
+}
+}
+
+#endif // PUMPKIN_TEST_ASSERTIONS_H

@@ -527,7 +527,7 @@ Version 1.0 dated 2006-09-05.
 
 #include "utils/symbol_p.h"
 
-SevenSegmentsML::SevenSegmentsML(): QQuickPaintedItem(), value(INT_MAX), animation(new QVariantAnimation(this)), color(Qt::black)
+SevenSegmentsML::SevenSegmentsML(): QQuickPaintedItem(), value(INT_MAX), animation(new QVariantAnimation(this)), shape(), color(Qt::black)
 {
 	animation->setDuration(1000);
 	animation->setStartValue(0.0);

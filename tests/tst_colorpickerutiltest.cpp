@@ -4,7 +4,6 @@
 #include "../controlers/colorpicker/common/util/cursorcolorizer.h"
 
 #include <pumpkintest.h>
-#include <assertions.h>
 
 inline std::ostream& operator<<(std::ostream& os, QColor const& s)
 {
@@ -12,10 +11,10 @@ inline std::ostream& operator<<(std::ostream& os, QColor const& s)
 	return os;
 }
 
-class ColorPickerUtilTest : public PumpkinTest::AutoRegisteredTest
+class ColorPickerUtilTest : public PumpkinTest::AutoRegisteredTestFeature
 {
 public:
-	ColorPickerUtilTest(): PumpkinTest::AutoRegisteredTest("Color Picker Test Utils")
+	ColorPickerUtilTest(): PumpkinTest::AutoRegisteredTestFeature("Color Picker Test Utils")
 	{
 		test("Dark color should be at angle 0", []()
 		{
@@ -39,21 +38,21 @@ public:
 
 		test("Should pick a dark color when white", []()
 		{
-			CursorColorizer sut(0, 180);
+			CursorColorizer sut;
 			PumpkinTest::Assertions::assertEquals(sut(QColor(255, 255, 255)), QColor(40, 40, 40));
 		});
 
 		test("Should pick a light color when black", []()
 		{
-			CursorColorizer sut(0, 180);
+			CursorColorizer sut;
 			PumpkinTest::Assertions::assertEquals(sut(QColor(0, 0, 0)), QColor(240, 240, 240));
 		});
 
 		test("Should pick a color with smooth transition", []()
 		{
-			CursorColorizer sut(0, 180);
+			CursorColorizer sut;
 			PumpkinTest::Assertions::assertEquals(sut(QColor(0, 255, 128)).toRgb(), QColor(153, 153, 153));
 		});
 	}
 };
-REGISTER_TEST(ColorPickerUtilTest)
+REGISTER_PUMPKIN_TEST(ColorPickerUtilTest)

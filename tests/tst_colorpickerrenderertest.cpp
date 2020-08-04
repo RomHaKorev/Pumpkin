@@ -2,7 +2,6 @@
 #include "../controlers/colorpicker/common/colorpickerrenderer.h"
 
 #include <pumpkintest.h>
-#include <assertions.h>
 
 
 inline std::ostream& operator<<(std::ostream& os, QSizeF const& s)
@@ -46,10 +45,10 @@ private:
 };
 
 
-class ColorPickerRendererTest : public PumpkinTest::AutoRegisteredTest
+class ColorPickerRendererTest : public PumpkinTest::AutoRegisteredTestFeature
 {
 public:
-	ColorPickerRendererTest(): PumpkinTest::AutoRegisteredTest("Color Picker Test")
+	ColorPickerRendererTest(): PumpkinTest::AutoRegisteredTestFeature("Color Picker Test")
 	{
 		test("contentRect should be inside the widget", []()
 		{
@@ -59,4 +58,4 @@ public:
 		});
 	}
 };
-REGISTER_TEST(ColorPickerRendererTest)
+REGISTER_PUMPKIN_TEST(ColorPickerRendererTest)

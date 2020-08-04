@@ -518,7 +518,6 @@ Version 1.0 dated 2006-09-05.
 */
 
 #include <pumpkintest.h>
-#include <assertions.h>
 
 #include "../indicators/sevensegments/symbol.h"
 
@@ -535,20 +534,19 @@ inline std::ostream& operator<<(std::ostream& os, Segment const& s)
 	return os;
 }*/
 
-class SymbolTest : public PumpkinTest::AutoRegisteredTest
+class SymbolTest : public PumpkinTest::AutoRegisteredTestFeature
 {
 public:
-	SymbolTest(): PumpkinTest::AutoRegisteredTest("Symbol Test")
+	SymbolTest(): PumpkinTest::AutoRegisteredTestFeature("Symbol Test")
 	{
-		test("Symbol", []()
+		test("Symbol should only contain segments passed as argument", []()
 		{
-			Symbol s;
+			Symbol s(Segments() << 1 << 2);
+			PumpkinTest::Assertions::assertTrue(s.contains(1) && s.contains(2) && !s.contains(3));
 		});
-
-
 	}
 };
 
-REGISTER_TEST(SymbolTest)
+REGISTER_PUMPKIN_TEST(SymbolTest)
 
 

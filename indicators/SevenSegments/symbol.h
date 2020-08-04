@@ -535,7 +535,7 @@ public:
 	Symbol(Segments const& segments);
 	Symbol() = default;
 
-	SymbolShape to(Symbol const& other) const;
+	SymbolTransformation to(Symbol const& other) const;
 
 	QVector<int>::const_iterator begin() const { return indexes.begin(); }
 	QVector<int>::const_iterator end() const { return indexes.end(); }
@@ -544,6 +544,8 @@ public:
 
 private:
 	Segments indexes;
+
+	friend class SymbolTransformation;
 };
 
 #endif // SYMBOL_H

@@ -524,11 +524,7 @@ Version 1.0 dated 2006-09-05.
 
 #include "segment.h"
 
-enum Action {
-	Keep,
-	Add,
-	Remove
-};
+#include "action.h"
 
 struct SegmentShape
 {

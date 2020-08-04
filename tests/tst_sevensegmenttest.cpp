@@ -1,7 +1,6 @@
 #include "../indicators/sevensegments/utils/sevensegmentsutils.h"
 
 #include <pumpkintest.h>
-#include <assertions.h>
 
 inline std::ostream& operator<<(std::ostream& os, QPointF const& s)
 {
@@ -16,10 +15,10 @@ inline std::ostream& operator<<(std::ostream& os, Segment const& s)
 	return os;
 }
 
-class SevenSegmentTest : public PumpkinTest::AutoRegisteredTest
+class SevenSegmentTest : public PumpkinTest::AutoRegisteredTestFeature
 {
 public:
-	SevenSegmentTest(): PumpkinTest::AutoRegisteredTest("Seven Segment Test")
+	SevenSegmentTest(): PumpkinTest::AutoRegisteredTestFeature("Seven Segment Test")
 	{
 		test("Segments should be bounded to content rect", []()
 		{
@@ -55,4 +54,4 @@ public:
 	}
 };
 
-REGISTER_TEST(SevenSegmentTest)
+REGISTER_PUMPKIN_TEST(SevenSegmentTest)

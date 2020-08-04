@@ -524,25 +524,10 @@ Version 1.0 dated 2006-09-05.
 #include <QPainter>
 #include <QDebug>
 
-int findMaxStep(std::initializer_list<QVector<SegmentShape>> lists)
-{
-	int max = 0;
-	for (auto list: lists)
-	{
-		max = std::max(std::max_element(list.begin(), list.end(),
-										[](SegmentShape const& a, SegmentShape const& b) {
-											return (a.step < b.step);
-										})->step
-				, max);
-	}
-	return max;
-}
 
-SymbolShape::SymbolShape(QVector<SegmentShape> const& fixed, QVector<SegmentShape> const& toGrow, QVector<SegmentShape> const& toShrink):
-	fixed(fixed), toGrow(toGrow), toShrink(toShrink), stepCount(1 + findMaxStep({fixed, toGrow, toShrink}))
-{
-	qDebug() << "Nb of steps:" << stepCount;
-}
+
+SymbolShape::SymbolShape(SymbolTransformation const& transformation): transformation(transformation)
+{}
 
 
 QVector<Segment> SymbolShape::createSegments(QRectF const& contentRect)
@@ -588,17 +573,19 @@ qreal SymbolShape::boundDistanceOnSegment(int segment, qreal distance, int numbe
 void SymbolShape::paint(QPainter& painter, QRectF const& contentRect, qreal distance)
 {
 	auto grow = [this, distance](int part) {
-		return boundDistanceOnSegment(part, distance, stepCount);
+		return boundDistanceOnSegment(part, distance, transformation.stepCount());
 	};
 
 	auto shrink = [this, distance](int part) {
-		return boundDistanceOnSegment(stepCount - part, 1.0 - distance, stepCount);
+		return boundDistanceOnSegment(transformation.stepCount() - part, 1.0 - distance, transformation.stepCount());
 	};
 
 	auto segments = createSegments(contentRect);
-	for (auto shape: fixed)
+
+	for (auto shape: transformation.segmentToTransform(Action::Keep))
 		painter.drawPolygon(segments.at(shape.index).shape(10));
-	for (auto shape: toGrow)
+
+	for (auto shape: transformation.segmentToTransform(Action::Add))
 	{
 		if (shape.actionThrough == -1)
 			painter.drawPolygon(segments.at(shape.index).fromMiddle(grow(shape.step)).shape(10));
@@ -607,7 +594,7 @@ void SymbolShape::paint(QPainter& painter, QRectF const& contentRect, qreal dist
 		else
 			painter.drawPolygon(segments.at(shape.index).fromEnd(grow(shape.step)).shape(10));
 	}
-	for (auto shape: toShrink)
+	for (auto shape: transformation.segmentToTransform(Action::Remove))
 	{
 		if (shape.actionThroughConnectedByStartPoint())
 			painter.drawPolygon(segments.at(shape.index).fromStart(shrink(shape.step)).shape(10));

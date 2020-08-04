@@ -519,16 +519,123 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#ifndef CURSORCOLORIZER_H
-#define CURSORCOLORIZER_H
+#ifndef PUMPKIN_TEST_TESTSUITE_H
+#define PUMPKIN_TEST_TESTSUITE_H
 
-#include <QColor>
+#include <string>
+#include <list>
+#include <functional>
+#include <sstream>
+#include <iostream>
+#include <math.h>
+#include <map>
 
-class CursorColorizer
+#include "./assertions.h"
+
+#include "./test.h"
+#include "./summary.h"
+
+namespace PumpkinTest {
+namespace details {
+inline std::ostream& operator<<(std::ostream& os, Summary const& s)
 {
+	bool first = true;
+	auto dump = [&](TestResult r, std::string const& suffix)
+	{
+		if (s.at(r) == 0)
+			return;
+		if (first == false)
+			os << ", ";
+		first = false;
+
+		if (s.at(r) == 1)
+			os << s.at(r) << " test " << suffix;
+		else if (s.at(r) > 1)
+			os << s.at(r) << " tests " << suffix;
+	};
+
+	os << "Summary: ";
+	dump(TestResult::OK, "passed");
+	dump(TestResult::KO, "failed");
+	dump(TestResult::FAILED, "failed with error");
+	os << std::endl;
+	return os;
+}
+
+class TestSuite {
 public:
-	CursorColorizer();
-	QColor operator()(QColor const&) const;
+	TestSuite(std::string const& name): name(name)
+	{
+		maxSuiteTitleLength(name.size());
+	}
+
+	void test(std::string const& name, std::function<void()> func)
+	{
+		maxTitleLength(name.size());
+		tests.push_back(std::unique_ptr<Test>(new Test(name, func)));
+	}
+
+	Summary run()
+	{
+		Summary summary;
+		for (auto& test: tests)
+		{
+			setup();
+			summary[test->run()]++;
+			teardown();
+
+		}
+		return summary;
+	}
+
+	static size_t& maxTitleLength(size_t newValue=0)
+	{
+		static size_t s = 0;
+		s = std::max(newValue, s);
+		return s;
+	}
+
+	static size_t& maxSuiteTitleLength(size_t newValue=0)
+	{
+		static size_t s = 0;
+		s = std::max(newValue, s);
+		return s;
+	}
+
+	virtual void setup()
+	{}
+
+	virtual void teardown()
+	{}
+
+private:
+	std::string name;
+	std::list<std::unique_ptr<Test>> tests;
+
+	friend std::ostream& operator<<(std::ostream& os, TestSuite const& suite)
+	{
+		os << suite.name << std::string(maxSuiteTitleLength() - suite.name.size(), ' ');
+		bool first = true;
+		for (auto const& test: suite.tests)
+		{
+			if (!first)
+				os << std::string(maxSuiteTitleLength(), ' ');
+			os << " | ";
+			os.width(long(maxTitleLength()));
+			os << std::left << test->testname() << " | ";
+			os << test->state();
+			if (!test->message().empty())
+				os << " Cause: " << test->message();
+			os << std::endl;
+			first = false;
+		}
+		return os;
+	}
 };
 
-#endif // CURSORCOLORIZER_H
+
+
+}
+}
+
+#endif // PUMPKIN_TEST_TESTSUITE_H

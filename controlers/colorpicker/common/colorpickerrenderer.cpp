@@ -524,7 +524,7 @@ Version 1.0 dated 2006-09-05.
 
 ColorPickerRenderer::ColorPickerRenderer(ColorPickerBase* base, QObject *parent): QObject(parent), base(base),
 	animator(new ColorPickerAnimator()),
-	cursorColor(70, 100)
+	cursorColor()
 {
 	QObject::connect(animator->checkmarkAnimation, &QVariantAnimation::valueChanged, parent, [=]() { base->updateArea(okRect().toRect()); });
 	QObject::connect(animator->textAnimation, &QVariantAnimation::valueChanged, parent, [=]() { base->updateArea(okRect().toRect()); });

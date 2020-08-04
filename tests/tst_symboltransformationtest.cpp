@@ -517,18 +517,144 @@ jurisdiction, by the more diligent Party.
 Version 1.0 dated 2006-09-05.
 */
 
+#include <pumpkintest.h>
+
+#include "../indicators/sevensegments/symbol.h"
+#include "../indicators/sevensegments/segmentshape.h"
+
+/*inline std::ostream& operator<<(std::ostream& os, QPointF const& s)
+{
+	os << s.x() << ";" << s.y();
+	return os;
+}
 
 
-#ifndef CURSORCOLORIZER_H
-#define CURSORCOLORIZER_H
+inline std::ostream& operator<<(std::ostream& os, Segment const& s)
+{
+	os << "Segment(" << s.p1() << ", " << s.p2() << ")";
+	return os;
+}*/
 
-#include <QColor>
+inline std::ostream& operator<<(std::ostream& os, Action s)
+{
+	switch(s)
+	{
+	case Action::Add:
+		os << "Add";
+		break;
+	case Action::Remove:
+		os << "Remove";
+		break;
+	case Action::Keep:
+		os << "Keep";
+		break;
+	}
+	return os;
+}
 
-class CursorColorizer
+inline std::ostream& operator<<(std::ostream& os, SegmentShape const& s)
+{
+	os << "segment: " << s.index << ", step: " << s.step << ", action: " << s.action;
+	if (s.actionThrough != -1)
+		os << ", through: " << s.actionThrough;
+	return os;
+}
+
+inline std::ostream& operator<<(std::ostream& os, QVector<SegmentShape> const& s)
+{
+	for (auto i: s)
+	os << i << std::endl;
+	return os;
+}
+
+bool operator==(SegmentShape const& s1, SegmentShape const& s2)
+{
+	return s1.step == s2.step && s1.index == s2.index && s1.action == s2.action && s1.actionThrough == s2.actionThrough;
+}
+
+class SymbolTransformationTest : public PumpkinTest::AutoRegisteredTestFeature
 {
 public:
-	CursorColorizer();
-	QColor operator()(QColor const&) const;
+	virtual void setup() override
+	{
+		std::cout << "In setup" << std::endl;
+	}
+
+	virtual void teardown() override
+	{
+		std::cout << "In teardown" << std::endl;
+	}
+	SymbolTransformationTest(): PumpkinTest::AutoRegisteredTestFeature("Symbol Transformation Test")
+	{
+		test("If symbol was null, transformation should include all segments from new symbol", []()
+		{
+			Symbol s1;
+			Symbol s2(Segments() << 1 << 2 << 3);
+			SymbolTransformation transformation(s1, s2);
+			PumpkinTest::Assertions::assertTrue(transformation.segmentToTransform(Action::Keep).size() == 0);
+			PumpkinTest::Assertions::assertTrue(transformation.segmentToTransform(Action::Add).contains(SegmentShape(1, 0, Action::Add)));
+			PumpkinTest::Assertions::assertTrue(transformation.segmentToTransform(Action::Add).contains(SegmentShape(2, 0, Action::Add)));
+		});
+
+		/*test("Transformation should include segment to keep", []()
+		{
+			Symbol s1(Segments() << 0 << 6 << 1 << 2);
+			Symbol s2(Segments() << 6 << 1 << 2);
+			SymbolTransformation transformation(s1, s2);
+			PumpkinTest::Assertions::assertTrue(transformation.segmentToTransform(Action::Keep).size() == 3);
+			PumpkinTest::Assertions::assertTrue(transformation.segmentToTransform(Action::Keep).contains(SegmentShape(1, 0, Action::Keep)));
+			PumpkinTest::Assertions::assertTrue(transformation.segmentToTransform(Action::Keep).contains(SegmentShape(2, 0, Action::Keep)));
+		});
+
+		test("If no segment in common, Transformation should take the first one as reference", []()
+		{
+			Symbol s1(Segments() << 0 << 1 << 2);
+			Symbol s2(Segments() << 3 << 4 << 6);
+			SymbolTransformation transformation(s1, s2);
+			PumpkinTest::Assertions::assertTrue(transformation.segmentToTransform(Action::Keep).size() == 0);
+			PumpkinTest::Assertions::assertContains(transformation.segmentToTransform(Action::Add), SegmentShape(3, 0, Action::Add));
+			PumpkinTest::Assertions::assertContains(transformation.segmentToTransform(Action::Add), SegmentShape(4, 1, Action::Add, 3));
+		});
+
+		test("Transformation should remove segments sequentialy", []()
+		{
+			Symbol s1(Segments() << 0 << 1 << 2);
+			Symbol s2(Segments() << 3 << 4 << 6);
+			SymbolTransformation transformation(s1, s2);
+			PumpkinTest::Assertions::assertTrue(transformation.segmentToTransform(Action::Remove).size() == 3);
+			PumpkinTest::Assertions::assertContains(transformation.segmentToTransform(Action::Remove), SegmentShape(2, 0, Action::Remove, 1));
+			PumpkinTest::Assertions::assertContains(transformation.segmentToTransform(Action::Remove), SegmentShape(1, 1, Action::Remove, 0));
+			PumpkinTest::Assertions::assertContains(transformation.segmentToTransform(Action::Remove), SegmentShape(0, 2, Action::Remove));
+		});
+
+		test("Segments should be added sequentialy", []()
+		{
+			Symbol s1(Segments() << 2);
+			Symbol s2(Segments() << 3 << 4 << 2);
+			SymbolTransformation transformation(s1, s2);
+			PumpkinTest::Assertions::assertTrue(transformation.segmentToTransform(Action::Keep).contains(SegmentShape(2, 0, Action::Keep)));
+			PumpkinTest::Assertions::assertTrue(transformation.segmentToTransform(Action::Add).contains(SegmentShape(3, 1, Action::Add, 2)));
+			PumpkinTest::Assertions::assertTrue(transformation.segmentToTransform(Action::Add).contains(SegmentShape(4, 2, Action::Add, 3)));
+		});
+
+		test("Segments should have enough steps to display segments sequentialy", []()
+		{
+			Symbol s1(Segments() << 2);
+			Symbol s2(Segments() << 3 << 4 << 2);
+			SymbolTransformation transformation(s1, s2);
+			PumpkinTest::Assertions::assertEquals(3, transformation.stepCount());
+		});
+
+		test("If segment cannot be added through another, it will be added at first step", []()
+		{
+			Symbol s1(Segments() << 0);
+			Symbol s2(Segments() << 0 << 1 << 3);
+			SymbolTransformation transformation(s1, s2);
+			PumpkinTest::Assertions::assertTrue(transformation.segmentToTransform(Action::Add).contains(SegmentShape(3, 0, Action::Add)));
+		});*/
+	}
 };
 
-#endif // CURSORCOLORIZER_H
+REGISTER_PUMPKIN_TEST(SymbolTransformationTest)
+
+

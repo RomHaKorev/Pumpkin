@@ -517,18 +517,71 @@ jurisdiction, by the more diligent Party.
 Version 1.0 dated 2006-09-05.
 */
 
+#include <pumpkintest.h>
 
+#include <sevensegmentsml.h>
 
-#ifndef CURSORCOLORIZER_H
-#define CURSORCOLORIZER_H
+inline std::ostream& operator<<(std::ostream& os, QColor const& s)
+{
+	os << "QColor(" << s.red() << ", " << s.green() << ", " << s.blue() << ")";
+	return os;
+}
 
-#include <QColor>
-
-class CursorColorizer
+class SevenSegmentMLTransformationTest : public PumpkinTest::AutoRegisteredTestFeature
 {
 public:
-	CursorColorizer();
-	QColor operator()(QColor const&) const;
+	SevenSegmentMLTransformationTest(): PumpkinTest::AutoRegisteredTestFeature("Seven Segments QML Test")
+	{
+		test("Should use the right color", []()
+		{
+			SevenSegmentsML* sut = new SevenSegmentsML();
+			sut->setValue(8);
+			sut->setColor(QColor(10, 20, 30));
+			QPixmap pix(10, 10);
+			QPainter* painter = new QPainter(&pix);
+			sut->paint(painter);
+			PumpkinTest::Assertions::assertEquals(QColor(10, 20, 30), painter->brush().color());
+			PumpkinTest::Assertions::assertEquals(QColor(10, 20, 30), sut->getColor());
+			painter->end();
+			sut->deleteLater();
+		});
+
+		test("Should accept value from 0 to 9", []()
+		{
+			SevenSegmentsML* sut = new SevenSegmentsML();
+			for (unsigned int i = 0; i != 10; ++i)
+			{
+				sut->setValue(i);
+				PumpkinTest::Assertions::assertEquals(i, sut->getValue());
+			}
+			delete sut;
+		});
+
+		test("Should refuse value greater than 9", []()
+		{
+			SevenSegmentsML* sut = new SevenSegmentsML();
+			sut->setValue(10);
+			PumpkinTest::Assertions::assertEquals(unsigned(0), sut->getValue());
+			sut->deleteLater();
+		});
+
+		test("Should notify value changed only for new value", []()
+		{
+			SevenSegmentsML* sut = new SevenSegmentsML();
+			sut->setValue(3);
+			bool called = false;
+			QObject::connect(sut, &SevenSegmentsML::valueChanged, sut, [&called]() {
+				called = true;
+			});
+			sut->setValue(3);
+			PumpkinTest::Assertions::assertFalse(called);
+			sut->setValue(4);
+			PumpkinTest::Assertions::assertTrue(called);
+			sut->deleteLater();
+		});
+	}
 };
 
-#endif // CURSORCOLORIZER_H
+REGISTER_PUMPKIN_TEST(SevenSegmentMLTransformationTest)
+
+

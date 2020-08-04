@@ -519,73 +519,37 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#ifndef AUTOREGISTER_H
-#define AUTOREGISTER_H
+#ifndef PUMPKIN_TEST_H
+#define PUMPKIN_TEST_H
 
 #include <vector>
 #include <iostream>
 
-#include "testsuite.h"
+#include "private/assertions.h"
+
+#include "private/testsuite.h"
+#include "private/autoregistration.h"
 
 
 namespace PumpkinTest {
 
-namespace details {
-class AutoRegisteredTestFactory
-{
-public:
-	AutoRegisteredTestFactory(){}
-};
-}
-
-class AutoRegisteredTest: public PumpkinTest::details::TestSuite
-{
-public:
-	AutoRegisteredTest(std::string const& name): PumpkinTest::details::TestSuite(name)
-	{}
-};
-
-class AutoRegisteredTests
-{
-public:
-	AutoRegisteredTests()
-	{}
-
-	virtual ~AutoRegisteredTests() = 0;
-private:
-	static std::vector<std::shared_ptr<AutoRegisteredTest>>& factories()
-	{
-		static std::vector<std::shared_ptr<AutoRegisteredTest>> f = std::vector<std::shared_ptr<AutoRegisteredTest>>();
-		return f;
-	}
-	template<typename T> friend class AutoRegistration;
-	friend int runAll();
-};
-
-template<typename T> class AutoRegistration: public details::AutoRegisteredTestFactory
-{
-public:
-	AutoRegistration()
-	{
-		AutoRegisteredTests::factories().push_back(std::shared_ptr<T>(new T()));
-	}
-};
+using AutoRegisteredTestFeature = PumpkinTest::details::TestSuite;
 
 inline int runAll()
 {
 	PumpkinTest::details::Summary summary;
-	for (auto test : AutoRegisteredTests::factories())
+	for (auto test : PumpkinTest::details::AutoRegisteredTestCampaign::factories())
 		summary += test->run();
-	for (auto test : AutoRegisteredTests::factories())
+	for (auto test : PumpkinTest::details::AutoRegisteredTestCampaign::factories())
 		std::cout << *test;
 
 	std::cout << std::endl << summary << std::endl;
-	return 0;
+	return summary.result();
 }
 
 }
 
 
-#define REGISTER_TEST(T) static const PumpkinTest::AutoRegistration<T> T ## Inst = PumpkinTest::AutoRegistration<T>();
+#define REGISTER_PUMPKIN_TEST(T) static const PumpkinTest::details::AutoRegistration<T> T ## Inst = PumpkinTest::details::AutoRegistration<T>();
 
-#endif // AUTOREGISTER_H
+#endif // PUMPKIN_TEST_H

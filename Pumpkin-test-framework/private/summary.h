@@ -519,16 +519,88 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#ifndef CURSORCOLORIZER_H
-#define CURSORCOLORIZER_H
+#ifndef PUMPKIN_TEST_SUMMARY_H
+#define PUMPKIN_TEST_SUMMARY_H
 
-#include <QColor>
+#include <string>
+#include <list>
+#include <functional>
+#include <sstream>
+#include <iostream>
+#include <math.h>
+#include <map>
 
-class CursorColorizer
+#include "./assertions.h"
+
+#include "./test.h"
+
+namespace PumpkinTest {
+namespace details {
+
+inline std::ostream& operator<<(std::ostream& os, TestResult const& result)
+{
+	switch(result)
+	{
+	case NOT_RUNNED:
+		os << "\033[0;33mNot runned\033[0m";
+		break;
+	case OK:
+		//os << "OK";
+		os << "\033[0;32mOK\033[0m";
+		break;
+	case KO:
+		os << "\033[0;31mKO\033[0m";
+		//os << "KO";
+		break;
+	case FAILED:
+		os << "\033[1;31mFailed\033[0m";
+	}
+	return os;
+}
+
+
+class Summary
 {
 public:
-	CursorColorizer();
-	QColor operator()(QColor const&) const;
+	Summary()
+	{
+		results.insert(std::pair<TestResult, int>(TestResult::OK, 0));
+		results.insert(std::pair<TestResult, int>(TestResult::KO, 0));
+		results.insert(std::pair<TestResult, int>(TestResult::FAILED, 0));
+		results.insert(std::pair<TestResult, int>(TestResult::NOT_RUNNED, 0));
+	}
+
+	Summary& operator+=(Summary const& other)
+	{
+		for (auto input: other.results)
+		{
+			results[input.first] += input.second;
+		}
+		return *this;
+	}
+
+	inline int at(TestResult type) const
+	{
+		return results.at(type);
+	}
+
+	inline int& operator[](TestResult type)
+	{
+		return results[type];
+	}
+
+	int result() const
+	{
+		if (results.at(TestResult::KO) + results.at(TestResult::FAILED))
+			return -1;
+		return 0;
+	}
+private:
+	std::map<TestResult, int> results;
 };
 
-#endif // CURSORCOLORIZER_H
+
+}
+}
+
+#endif // PUMPKIN_TEST_SUMMARY_H

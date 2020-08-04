@@ -516,19 +516,32 @@ jurisdiction, by the more diligent Party.
 
 Version 1.0 dated 2006-09-05.
 */
+#ifndef PUMPKIN_TEST_AUTOREGISTRATION_H
+#define PUMPKIN_TEST_AUTOREGISTRATION_H
 
 
+#include "./autoregistrable.h"
+#include "./autoregistrationcampaign.h"
 
-#ifndef CURSORCOLORIZER_H
-#define CURSORCOLORIZER_H
+#include <vector>
 
-#include <QColor>
 
-class CursorColorizer
+namespace PumpkinTest {
+int runAll();
+namespace details {
+
+template<typename T> class AutoRegistration: public details::AutoRegistrable
 {
 public:
-	CursorColorizer();
-	QColor operator()(QColor const&) const;
+	AutoRegistration()
+	{
+		AutoRegisteredTestCampaign::push(std::shared_ptr<T>(new T()));
+	}
 };
 
-#endif // CURSORCOLORIZER_H
+}
+}
+
+
+
+#endif // PUMPKIN_TEST_AUTOREGISTRATION_H

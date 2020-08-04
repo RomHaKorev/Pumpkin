@@ -550,9 +550,9 @@ signals:
 	void valueChanged(unsigned int);
 private:
 	unsigned int value;
-	SymbolShape shape;
 	Symbol currentSymbol;
 	QVariantAnimation* animation;
+	SymbolShape shape;
 	QColor color;
 };
 

@@ -11,7 +11,9 @@ HEADERS += \
     symbol.h \
     symbolshape.h \
     utils/symbol_p.h \
-    segmentshape.h
+    segmentshape.h \
+    symboltransformation.h \
+    action.h
 
 SOURCES += \
     sevensegmentsml.cpp \
@@ -20,8 +22,9 @@ SOURCES += \
     symbol.cpp \
     symbolshape.cpp \
     utils/symbol_p.cpp \
-    segmentshape.cpp
+    segmentshape.cpp \
+    symboltransformation.cpp
 
 
-QMAKE_CXXFLAGS += --coverage -fprofile-arcs -ftest-coverage
-QMAKE_LFLAGS   += --coverage -lgcov
+QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage
+QMAKE_POST_LINK = rm -f "*.gcda"

@@ -520,12 +520,9 @@ Version 1.0 dated 2006-09-05.
 #include <QApplication>
 
 #include <pumpkintest.h>
-
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
 	app.setAttribute(Qt::AA_Use96Dpi, true);
-	PumpkinTest::runAll();
-
-	return 0;
+	return PumpkinTest::runAll();
 }

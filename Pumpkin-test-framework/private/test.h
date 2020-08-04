@@ -519,16 +519,87 @@ Version 1.0 dated 2006-09-05.
 
 
 
-#ifndef CURSORCOLORIZER_H
-#define CURSORCOLORIZER_H
+#ifndef PUMPKIN_TEST_TEST_H
+#define PUMPKIN_TEST_TEST_H
 
-#include <QColor>
+#include <string>
+#include <list>
+#include <functional>
+#include <sstream>
+#include <iostream>
+#include <math.h>
+#include <map>
 
-class CursorColorizer
+#include "assertions.h"
+
+namespace PumpkinTest {
+namespace details {
+
+enum TestResult
 {
-public:
-	CursorColorizer();
-	QColor operator()(QColor const&) const;
+	NOT_RUNNED,
+	OK,
+	KO,
+	FAILED
 };
 
-#endif // CURSORCOLORIZER_H
+class Test
+{
+public:
+	Test(std::string const& name, std::function<void()> func): name(name), info(""), func(func), result(TestResult::NOT_RUNNED)
+	{}
+
+	TestResult run()
+	{
+#ifdef PUMPKINTEST_ASSERTION_COUNTER
+		Assertions::counter(0);
+#endif
+		try {
+			func();
+			result = TestResult::OK;
+		}
+		catch(PumpkinTest::exceptions::PumpkinTestException const& ex)
+		{
+			result = TestResult::KO;
+			trace(ex.what());
+		}
+		catch(std::exception const& ex)
+		{
+			result = TestResult::FAILED;
+			trace(ex.what());
+		}
+		catch(...)
+		{
+			std::exception_ptr p = std::current_exception();
+			result = TestResult::FAILED;
+			trace("Unknown failure occurred. Possible memory corruption");
+
+		}
+		return result;
+	}
+
+	std::string const& testname() const { return name; }
+	TestResult state() const { return result; }
+	std::string const& message() const { return info; }
+
+private:
+	std::string name;
+	std::string info;
+	std::function<void()> func;
+	TestResult result;
+
+	void trace(std::string const& message)
+	{
+		std::stringstream ss;
+#ifdef PUMPKINTEST_ASSERTION_COUNTER
+		ss << "Assertion #" << Assertions::counter() << ": " << message;
+#else
+		ss << ex.what();
+#endif
+		info = ss.str();
+	}
+};
+}
+}
+
+#endif // PUMPKIN_TEST_TEST_H
