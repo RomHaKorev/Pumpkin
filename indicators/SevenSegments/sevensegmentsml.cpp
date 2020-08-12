@@ -563,11 +563,8 @@ unsigned int SevenSegmentsML::getValue() const
 void SevenSegmentsML::setValue(unsigned int value)
 {
 	if (value > 9)
-	{
-		qWarning() << "Value has to be between 0 and 9";
-		this->value = 0;
-		return;
-	}
+		value = UINT_MAX;
+
 	if (value == this->value)
 		return;
 

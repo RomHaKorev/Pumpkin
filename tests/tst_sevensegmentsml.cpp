@@ -557,11 +557,24 @@ public:
 			delete sut;
 		});
 
-		test("Should refuse value greater than 9", []()
+		test("Should consider values greater than 9 as invalid", []()
 		{
 			SevenSegmentsML* sut = new SevenSegmentsML();
 			sut->setValue(10);
-			PumpkinTest::Assertions::assertEquals(unsigned(0), sut->getValue());
+			PumpkinTest::Assertions::assertEquals(UINT_MAX, sut->getValue());
+			sut->deleteLater();
+		});
+
+		test("Should consider all values greater than 9 as the same", []()
+		{
+			SevenSegmentsML* sut = new SevenSegmentsML();
+			sut->setValue(10);
+			bool called = false;
+			QObject::connect(sut, &SevenSegmentsML::valueChanged, sut, [&called]() {
+				called = true;
+			});
+			sut->setValue(12);
+			PumpkinTest::Assertions::assertFalse(called);
 			sut->deleteLater();
 		});
 

@@ -57,7 +57,7 @@ Item {
                 id: foo
                 from: 0
                 to: 100
-                value: 50
+                value: 5
                 editable: true
                 onValueChanged: updateGallery()
                 Component.onCompleted: updateGallery()
@@ -69,7 +69,7 @@ Item {
                 property int offset: 0
                 model: 1
                 SevenSegments {
-                    value: foo.value % 10//(index + segments.offset) % 10
+                    value: foo.value//(index + segments.offset) % 10
                     width: 70
                     height: 120
                     color: picker.color

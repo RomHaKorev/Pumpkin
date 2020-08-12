@@ -551,6 +551,8 @@ QVector<SegmentShape> sequence(QVector<SegmentShape> const& commonShapes, Segmen
 {
 	QVector<SegmentShape> shapes;
 
+	if (indexes.isEmpty())
+		return shapes;
 
 	if (commonShapes.empty())
 	{
